@@ -85,7 +85,7 @@ class Greetings(commands.Cog):
         #         await channel.send(embed=embed)
 
         await ctx.send(
-            "I'm **Orbb**. I can do:\n1️show quake profile link `$profile somename`\n2️NOTHING\n3️just hello `$hi`"
+            "I'm **Orbb**. I can do:\n😸 show quake profile link `$profile somename`\n😻 NOTHING\n🙀 just hello `$hi`"
         )
 
 

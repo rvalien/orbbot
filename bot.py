@@ -14,6 +14,7 @@ if sys.platform == "win32":
 
     print("local execute")
 
+
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
 

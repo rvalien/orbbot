@@ -2,7 +2,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from moduls import random_gif
-import config
+from config import TOKEN
 
 
 class Greetings(commands.Cog):
@@ -12,6 +12,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        """show server description for new member"""
         text = """
 ✨{0.mention}✨, welcome to QC community for normal (mostly) players.\nWe love custom games: ⛳, 💈, duels\nlang: 🇩🇪 🇷🇺 🇬🇧
 """
@@ -27,6 +28,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
+        """Says goodbye"""
         text = """
 {0.mention} left us 🥺. We should find him and punish 👺
 """
@@ -47,23 +49,23 @@ class Greetings(commands.Cog):
         async with channel.typing():
             await asyncio.sleep(0.5)
         if self._last_member is None or self._last_member.id != member.id:
-            await ctx.send('Hello {0.name}~'.format(member))
+            await ctx.send("Hello {0.name}~".format(member))
         else:
-            await ctx.send('Hello {0.name}... This feels familiar.'.format(member))
+            await ctx.send("Hello {0.name}... This feels familiar.".format(member))
 
     @commands.command()
     async def profile(self, ctx, *, member=None):
-        """ """
+        """show link to qc profile"""
         if member:
             await ctx.send(f"https://stats.quake.com/profile/{member}")
         else:
-            await ctx.send(f"nickname not set. Try: `$profile clawz`")
+            await ctx.send("nickname not set. Try: `$profile clawz`")
 
     @commands.command()
     async def orbb(self, ctx, *, member: discord.Member = None):
-        """Says hello"""
-        member = member or ctx.author
-        channel = member.guild.system_channel
+        """orbb info"""
+        # member = member or ctx.author
+        # channel = member.guild.system_channel
         # embed = discord.Embed()
         # url = random_gif("what?")
         # embed.set_image(url=url)
@@ -72,9 +74,11 @@ class Greetings(commands.Cog):
         #     async with channel.typing():
         #         await channel.send(embed=embed)
 
-        await ctx.send("I'm **Orbb**. I can do:\nshow profile link `$profile somename`\nNOTHING\nmore nothing")
+        await ctx.send(
+            "I'm **Orbb**. I can do:\nshow profile link `$profile somename`\nNOTHING\nmore nothing"
+        )
 
 
-bot = commands.Bot(command_prefix='$')
+bot = commands.Bot(command_prefix="$")
 bot.add_cog(Greetings(bot))
-bot.run(config.TOKEN)
+bot.run(TOKEN)

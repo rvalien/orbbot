@@ -13,9 +13,10 @@ if sys.platform == "win32":
     from config import *
     print("local execute")
 
-
+print("bot run")
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
+print(apikey)
 
 
 class Greetings(commands.Cog):

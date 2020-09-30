@@ -1,8 +1,21 @@
 import asyncio
+import os
+import sys
 import discord
+
 from discord.ext import commands
 from moduls import random_gif
-from config import TOKEN
+
+print("init bot")
+
+# local debug
+if sys.platform == "win32":
+    from config import *
+
+    print("local execute")
+
+token = os.environ["TOKEN"]
+apikey = os.environ["TENSOR_API_KEY"]
 
 
 class Greetings(commands.Cog):
@@ -18,7 +31,7 @@ class Greetings(commands.Cog):
 """
         channel = member.guild.system_channel
         embed = discord.Embed()
-        url = random_gif("hello")
+        url = random_gif(apikey, "hello")
         embed.set_image(url=url)
 
         if channel is not None:
@@ -34,7 +47,7 @@ class Greetings(commands.Cog):
 """
         channel = member.guild.system_channel
         embed = discord.Embed()
-        url = random_gif("bye")
+        url = random_gif(apikey, "bye")
         embed.set_image(url=url)
         if channel is not None:
             async with channel.typing():
@@ -81,4 +94,4 @@ class Greetings(commands.Cog):
 
 bot = commands.Bot(command_prefix="$")
 bot.add_cog(Greetings(bot))
-bot.run(TOKEN)
+bot.run(token)

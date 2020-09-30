@@ -11,7 +11,6 @@ print("init bot")
 # local debug
 if sys.platform == "win32":
     from config import *
-
     print("local execute")
 
 

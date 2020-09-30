@@ -178,4 +178,5 @@ ipython_config.py
 .ipynb_checkpoints/
 Untitled.ipynb
 config.py
+exp.py
 old_main.py

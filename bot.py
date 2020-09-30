@@ -7,16 +7,12 @@ from discord.ext import commands
 from moduls import random_gif
 
 print("init bot")
-
-# local debug
 if sys.platform == "win32":
     from config import *
     print("local execute")
 
-print("bot run")
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
-print(apikey)
 
 
 class Greetings(commands.Cog):
@@ -56,7 +52,7 @@ class Greetings(commands.Cog):
             await channel.send(text.format(member), embed=embed)
 
     @commands.command()
-    async def hello(self, ctx, *, member: discord.Member = None):
+    async def hi(self, ctx, *, member: discord.Member = None):
         """Says hello"""
         member = member or ctx.author
         channel = member.guild.system_channel
@@ -89,7 +85,7 @@ class Greetings(commands.Cog):
         #         await channel.send(embed=embed)
 
         await ctx.send(
-            "I'm **Orbb**. I can do:\nshow profile link `$profile somename`\nNOTHING\nmore nothing"
+            "I'm **Orbb**. I can do:\n1️show quake profile link `$profile somename`\n2️NOTHING\n3️just hello `$hi`"
         )
 
 

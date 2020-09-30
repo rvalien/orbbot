@@ -1,4 +1,4 @@
 # List of required packages (Dependencies)
 certifi==2020.6.20
 requests==2.24.0
-discord.py==1.5.0
+discord.py==1.4.1

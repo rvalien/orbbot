@@ -1,5 +1,6 @@
 import requests
 import json
+import random
 
 
 def random_gif(apikey, search_term, lmt=8):
@@ -21,3 +22,14 @@ def random_gif(apikey, search_term, lmt=8):
     else:
         print(r.content)
         print(r.status_code)
+
+
+def random_map():
+    map_dict = {"🕳️": "Карта Church of Azathoth «Церковь Азатот»",
+                "🟩": "Карта Tempest Shrine «Храм Бури»",
+                "🔒📦": "Карта Lockbox",
+                "🟥🦎": "Карта Burial Chamber «Погребальная камера»",
+                "👁️": "Карта Ruins of Sartnath «Развалины Сарната»",
+                "🟦": "Карта Blood Covenant «Кровавый ковенант»",
+                }
+    return random.choice(list(map_dict.values()))

@@ -4,11 +4,12 @@ import sys
 import discord
 
 from discord.ext import commands
-from moduls import random_gif
+from moduls import random_gif, random_map
 
 print("init bot")
 if sys.platform == "win32":
     from config import *
+
     print("local execute")
 
 token = os.environ["TOKEN"]
@@ -85,8 +86,13 @@ class Greetings(commands.Cog):
         #         await channel.send(embed=embed)
 
         await ctx.send(
-            "I'm **Orbb**. I can do:\n😸 show quake profile link `$profile somename`\n😻 NOTHING\n🙀 just hello `$hi`"
+            "I'm **Orbb**. I can do:\n😸 show quake profile link `$profile somename`\n😻 chose random map `$rmap`\n🙀 just hello `$hi`"
         )
+
+    @commands.command()
+    async def rmap(self, ctx, *, member: discord.Member = None):
+        """orbb info"""
+        await ctx.send(random_map())
 
 
 bot = commands.Bot(command_prefix="$")

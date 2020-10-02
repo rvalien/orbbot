@@ -32,4 +32,5 @@ def random_map():
                 "👁️": "Карта Ruins of Sartnath «Развалины Сарната»",
                 "🟦": "Карта Blood Covenant «Кровавый ковенант»",
                 }
-    return random.choice(list(map_dict.values()))
+    key = random.choice(list(map_dict.keys()))
+    return key, map_dict[key]

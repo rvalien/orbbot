@@ -92,7 +92,8 @@ class Greetings(commands.Cog):
     @commands.command()
     async def rmap(self, ctx, *, member: discord.Member = None):
         """orbb info"""
-        await ctx.send(random_map())
+        icon, text = random_map()
+        await ctx.send(f"{icon}\n{text}")
 
 
 bot = commands.Bot(command_prefix="$")

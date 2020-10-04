@@ -40,8 +40,10 @@ class Greetings(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         """Says goodbye"""
-        text = """
-{0.mention} left us 🥺. We should find him and punish 👺
+        text = f"""
+{member.mention} left us 🥺. We should find him and punish 👺.({str(member)}{member.display_name}{member.nick})
+Считаю, что он ушёл очень больно. Считаю, что он мучался в всвоём отключении. Жаль, конечно, этого добряка.
+Конечно, он со мной не играл... Пару игр он со мной поиграл, все равно жалко его. Хороший был человек
 """
         channel = member.guild.system_channel
         embed = discord.Embed()

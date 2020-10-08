@@ -2,7 +2,7 @@ import asyncio
 import os
 import sys
 import discord
-
+import random
 from discord.ext import commands
 from moduls import random_gif, random_map
 
@@ -77,25 +77,25 @@ class Greetings(commands.Cog):
     @commands.command()
     async def orbb(self, ctx, *, member: discord.Member = None):
         """orbb info"""
-        # member = member or ctx.author
-        # channel = member.guild.system_channel
-        # embed = discord.Embed()
-        # url = random_gif("what?")
-        # embed.set_image(url=url)
-
-        # if channel is not None:
-        #     async with channel.typing():
-        #         await channel.send(embed=embed)
-
         await ctx.send(
-            "I'm **Orbb**. I can do:\n😸 show quake profile link `$profile somename`\n😻 chose random map `$rmap`\n🙀 just hello `$hi`"
+            "I'm **Orbb**. I can do:\n"
+            "😸 show quake profile link `$profile somename`\n"
+            "🗺️ chose random map `$map`\n"
+            "🤓 chose random spectator from voice chat users `$spec`\n"
+            "👋 just hello `$hi`"
         )
 
     @commands.command()
-    async def rmap(self, ctx, *, member: discord.Member = None):
+    async def map(self, ctx, *, member: discord.Member = None):
         """orbb info"""
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}")
+
+    @commands.command()
+    async def spec(self, ctx, *, member: discord.Member = None):
+        """orbb info"""
+        channel = ctx.message.author.voice.channel
+        await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=True)
 
 
 bot = commands.Bot(command_prefix="$")

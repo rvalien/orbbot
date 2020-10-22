@@ -106,7 +106,7 @@ class Greetings(commands.Cog):
     async def spec(self, ctx, *, member: discord.Member = None):
         """orbb info"""
         channel = ctx.message.author.voice.channel
-        await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=True)
+        await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=False)
 
 
 bot = commands.Bot(command_prefix="$")

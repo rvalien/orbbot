@@ -90,6 +90,7 @@ class Greetings(commands.Cog):
         """orbb info"""
         await ctx.send(
             "I'm **Orbb**. I can do:\n"
+            "👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams `$team`\n"
             "😸 show quake profile link `$profile somename`\n"
             "🗺️ chose random map `$map`\n"
             "🤓 chose random spectator from voice chat users `$spec`\n"
@@ -103,11 +104,21 @@ class Greetings(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def spec(self, ctx, *, member: discord.Member = None):
+    async def team(self, ctx, *, member: discord.Member = None):
         """orbb info"""
         if ctx.message.author.voice:
             channel = ctx.message.author.voice.channel
-            await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=False)
+            all_members = channel.members
+            print(all_members)
+            random.shuffle(all_members)
+            random.shuffle(all_members)
+            separator = len(all_members) // 2
+            team1 = list(all_members[:separator])
+            team2 = list(all_members[separator:])
+            if team1:
+                await ctx.send(f'состав первой команды: {", ".join(map(lambda x: x.name, team1))}', tts=True)
+            if team2:
+                await ctx.send(f'состав второй команды: {", ".join(map(lambda x: x.name, team2))}', tts=True)
         else:
             await ctx.send("в голосовом канале нет никого", tts=False)
 

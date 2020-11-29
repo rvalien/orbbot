@@ -107,10 +107,7 @@ class Greetings(commands.Cog):
         """orbb info"""
         if ctx.message.author.voice:
             channel = ctx.message.author.voice.channel
-            if ctx.message.author.nick in ("u6o_Hexyu#1516",):
-                await ctx.send(f"в спеки идёт {ctx.message.author.name}", tts=False)
-            else:
-                await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=False)
+            await ctx.send(f"в спеки идёт {random.choice(channel.members).name}", tts=False)
         else:
             await ctx.send("в голосовом канале нет никого", tts=False)
 

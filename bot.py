@@ -107,8 +107,10 @@ class Greetings(commands.Cog):
     async def team(self, ctx, *, member: discord.Member = None):
         """orbb info"""
         if ctx.message.author.voice:
+            print(ctx.message.author.voice.channel.members)
             channel = ctx.message.author.voice.channel
             all_members = channel.members
+            print(channel)
             print(all_members)
             random.shuffle(all_members)
             random.shuffle(all_members)
@@ -116,9 +118,15 @@ class Greetings(commands.Cog):
             team1 = list(all_members[:separator])
             team2 = list(all_members[separator:])
             if team1:
-                await ctx.send(f'состав первой команды: {", ".join(map(lambda x: x.name, team1))}', tts=True)
+                await ctx.send(
+                    f'состав первой команды: {", ".join(map(lambda x: x.name, team1))}',
+                    tts=True,
+                )
             if team2:
-                await ctx.send(f'состав второй команды: {", ".join(map(lambda x: x.name, team2))}', tts=True)
+                await ctx.send(
+                    f'состав второй команды: {", ".join(map(lambda x: x.name, team2))}',
+                    tts=True,
+                )
         else:
             await ctx.send("в голосовом канале нет никого", tts=False)
 

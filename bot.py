@@ -120,12 +120,12 @@ class Greetings(commands.Cog):
             if team1:
                 await ctx.send(
                     f'состав первой команды: {", ".join(map(lambda x: x.name, team1))}',
-                    tts=True,
+                    tts=False,
                 )
             if team2:
                 await ctx.send(
                     f'состав второй команды: {", ".join(map(lambda x: x.name, team2))}',
-                    tts=True,
+                    tts=False,
                 )
         else:
             await ctx.send("в голосовом канале нет никого", tts=False)

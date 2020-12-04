@@ -108,9 +108,9 @@ class Greetings(commands.Cog):
         """orbb info"""
         if ctx.message.author.voice:
             print(ctx.message.author.voice.channel.members)
-            channel = ctx.message.author.voice.channel
-            all_members = channel.members
-            print(channel)
+            voice_channel = ctx.message.author.voice.channel
+            all_members = voice_channel.members
+            print(voice_channel)
             print(all_members)
             random.shuffle(all_members)
             random.shuffle(all_members)
@@ -119,16 +119,16 @@ class Greetings(commands.Cog):
             team2 = list(all_members[separator:])
             if team1:
                 await ctx.send(
-                    f'team 🌻: {", ".join(map(lambda x: x.name, team1))}',
+                    f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}',
                     tts=False,
                 )
             if team2:
                 await ctx.send(
-                    f'team ❄️: {", ".join(map(lambda x: x.name, team2))}',
+                    f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}',
                     tts=False,
                 )
         else:
-            await ctx.send("в голосовом канале нет никого", tts=False)
+            await ctx.send("voice channel is empty", tts=False)
 
 
 bot = commands.Bot(command_prefix="$")

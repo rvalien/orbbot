@@ -112,7 +112,7 @@ class Greetings(commands.Cog):
             all_members = voice_channel.members
             print(all_members)
             if not all_members:
-                await ctx.send("beep boop.. need more time to calculate")
+                await ctx.send("🤖 beep boop.. need more time to calculate")
             else:
                 random.shuffle(all_members)
                 random.shuffle(all_members)

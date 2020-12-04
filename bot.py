@@ -119,7 +119,7 @@ class Greetings(commands.Cog):
             team2 = list(all_members[separator:])
             if team1:
                 await ctx.send(
-                    f'ream 🌻: {", ".join(map(lambda x: x.name, team1))}',
+                    f'team 🌻: {", ".join(map(lambda x: x.name, team1))}',
                     tts=False,
                 )
             if team2:

@@ -3,6 +3,7 @@ import os
 import sys
 import discord
 import random
+import time
 from discord.ext import commands
 from moduls import random_gif, random_map
 
@@ -107,26 +108,24 @@ class Greetings(commands.Cog):
     async def team(self, ctx, *, member: discord.Member = None):
         """orbb info"""
         if ctx.message.author.voice:
-            print(ctx.message.author.voice.channel.members)
             voice_channel = ctx.message.author.voice.channel
             all_members = voice_channel.members
-            print(voice_channel)
             print(all_members)
-            random.shuffle(all_members)
-            random.shuffle(all_members)
-            separator = len(all_members) // 2
-            team1 = list(all_members[:separator])
-            team2 = list(all_members[separator:])
-            if team1:
-                await ctx.send(
-                    f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}',
-                    tts=False,
-                )
-            if team2:
-                await ctx.send(
-                    f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}',
-                    tts=False,
-                )
+            if not all_members:
+                await ctx.send("beep boop.. need more time to calculate")
+            else:
+                random.shuffle(all_members)
+                random.shuffle(all_members)
+                separator = len(all_members) // 2
+                team1 = list(all_members[:separator])
+                team2 = list(all_members[separator:])
+
+                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", tts=False)
+
+                if team1:
+                    await ctx.send(f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}', tts=False)
+                if team2:
+                    await ctx.send(f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}', tts=False)
         else:
             await ctx.send("voice channel is empty", tts=False)
 

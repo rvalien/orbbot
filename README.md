@@ -1,8 +1,8 @@
 # orbbot
-lil bot for lil discord channel
+### lil bot for lil discord channel
 
 
-Orbb can help:  
+##### Orbb can help:  
 `$hi`      👋 just hello  
 `$map`     🗺️ choose random map  
 `$profile` 😸 show quake profile link `$profile somename`  

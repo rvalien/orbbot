@@ -1,6 +1,6 @@
-import requests
 import json
 import random
+import requests
 
 
 def random_gif(apikey, search_term, lmt=8):
@@ -12,7 +12,6 @@ def random_gif(apikey, search_term, lmt=8):
     else:
         top_8gifs = None
     gif_id = top_8gifs["results"][0]["id"]
-    # itemurl = top_8gifs["results"][0]["itemurl"]
     gif_url = top_8gifs["results"][0]["media"][0]["gif"]["url"]
     r = requests.get(
         f"https://api.tenor.com/v1/registershare?id={gif_id}&key={apikey}&q={search_term}"

@@ -1,11 +1,11 @@
-import asyncio
-import os
-import sys
-import discord
-import random
-import time
 from discord.ext import commands
 from moduls import random_gif, random_map
+
+import asyncio
+import discord
+import os
+import random
+import sys
 
 print("init bot")
 if sys.platform == "win32":
@@ -76,10 +76,9 @@ class Greetings(commands.Cog):
     @commands.command()
     async def spec(self, ctx, *, member: discord.Member = None):
         """Spectator random choice if player more than 8"""
-        # await ctx.send("who wanna play?")
 
         msg = await ctx.channel.send("Who wanna play now? Add you reaction bellow ⬇️")
-        for emoji in ['✅', '❌']:
+        for emoji in ["✅", "❌"]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(20)
         msg = await ctx.channel.fetch_message(msg.id)
@@ -87,17 +86,18 @@ class Greetings(commands.Cog):
         reactors = await msg.reactions[0].users().flatten()
         # remove bots
         reactors = list(filter(lambda x: not x.bot, reactors))
-
+        # get only names
+        reactors = list(map(lambda x: x.name, reactors))
+        embed = discord.Embed()
+        url = random_gif(apikey, random.choice(["everyone", "war"]))
+        embed.set_image(url=url)
         if len(reactors) > 8:
             random.shuffle(reactors)
             players = reactors[:8]
             specs = reactors[8:]
-            await ctx.channel.send(f"{', '.join([x.name for x in specs])}  it's ☕ time!")
+            await ctx.channel.send(f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(specs)}", embed=embed)
         else:
-            embed = discord.Embed()
-            url = random_gif(apikey, random.choice(["everyone", "war"]))
-            embed.set_image(url=url)
-            await ctx.channel.send(f"Everyone can play!\n{[x.name for x in reactors]}",  embed=embed)
+            await ctx.channel.send(f"Everyone can play!\n{[x.name for x in reactors]}", embed=embed)
 
 
 bot = commands.Bot(command_prefix="$")

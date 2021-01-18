@@ -18,7 +18,7 @@ Orbb can help:
 ### setup
 to run this bot, you need to set environment variables:  
 `TOKEN` - discord bot token (https://discord.com/developers/docs/intro)  
-`TENSOR_API_KEY` gifapi token(https://tenor.com/gifapi/documentation)
+`TENSOR_API_KEY` gifapi token (https://tenor.com/gifapi/documentation)
 
 ---
 ### deploy

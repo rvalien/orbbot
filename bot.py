@@ -22,53 +22,9 @@ class Greetings(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        """show server description for new member"""
-        text = """
-✨{0.mention}✨, welcome to QC community for normal (mostly) players.\nWe love custom games: ⛳, 💈, duels\nlang: 🇩🇪 🇷🇺 🇬🇧
-"""
-        channel = member.guild.system_channel
-        embed = discord.Embed()
-        url = random_gif(apikey, "hello")
-        embed.set_image(url=url)
-
-        if channel is not None:
-            async with channel.typing():
-                await asyncio.sleep(0.5)
-            await channel.send(text.format(member), embed=embed)
-
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        """Says goodbye"""
-        nicks = f"{str(member)} "
-
-        if member.display_name:
-            nicks += f"{member.display_name} "
-
-        if member.nick:
-            nicks += f"{member.nick}"
-        text = f"""
-{member.mention} ({nicks}) left us 🥺. We should find him and punish 👺.
-
-Считаю, что он ушёл очень больно.
-Считаю, что он мучался в всвоём отключении.
-Жаль, конечно, этого добряка.
-Конечно, он со мной не играл... Пару игр он со мной поиграл, все равно жалко его.
-Хороший был человек.
-"""
-        channel = member.guild.system_channel
-        embed = discord.Embed()
-        url = random_gif(apikey, "bye")
-        embed.set_image(url=url)
-        if channel is not None:
-            async with channel.typing():
-                await asyncio.sleep(0.5)
-            await channel.send(text.format(member), embed=embed)
-
     @commands.command()
     async def hi(self, ctx, *, member: discord.Member = None):
-        """Says hello"""
+        """👋 just hello"""
         member = member or ctx.author
         channel = member.guild.system_channel
         async with channel.typing():
@@ -80,33 +36,21 @@ class Greetings(commands.Cog):
 
     @commands.command()
     async def profile(self, ctx, *, member=None):
-        """show link to qc profile"""
+        """😸 show quake profile link `$profile somename`"""
         if member:
             await ctx.send(f"https://stats.quake.com/profile/{member}")
         else:
             await ctx.send("nickname not set. Try: `$profile clawz`")
 
     @commands.command()
-    async def orbb(self, ctx, *, member: discord.Member = None):
-        """orbb info"""
-        await ctx.send(
-            "I'm **Orbb**. I can do:\n"
-            "👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams `$team`\n"
-            "😸 show quake profile link `$profile somename`\n"
-            "🗺️ chose random map `$map`\n"
-            "🤓 chose random spectator from voice chat users `$spec`\n"
-            "👋 just hello `$hi`"
-        )
-
-    @commands.command()
     async def map(self, ctx, *, member: discord.Member = None):
-        """orbb info"""
+        """"🗺️ chose random map"""
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
     async def team(self, ctx, *, member: discord.Member = None):
-        """orbb info"""
+        """👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams"""
         if ctx.message.author.voice:
             voice_channel = ctx.message.author.voice.channel
             all_members = voice_channel.members
@@ -128,6 +72,32 @@ class Greetings(commands.Cog):
                     await ctx.send(f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}', tts=False)
         else:
             await ctx.send("voice channel is empty", tts=False)
+
+    @commands.command()
+    async def spec(self, ctx, *, member: discord.Member = None):
+        """Spectator random choice if player more than 8"""
+        # await ctx.send("who wanna play?")
+
+        msg = await ctx.channel.send("Who wanna play now? Add you reaction bellow ⬇️")
+        for emoji in ['✅', '❌']:
+            await msg.add_reaction(emoji)
+        await asyncio.sleep(20)
+        msg = await ctx.channel.fetch_message(msg.id)
+        # get reactors who react first emoji
+        reactors = await msg.reactions[0].users().flatten()
+        # remove bots
+        reactors = list(filter(lambda x: not x.bot, reactors))
+
+        if len(reactors) > 8:
+            random.shuffle(reactors)
+            players = reactors[:8]
+            specs = reactors[8:]
+            await ctx.channel.send(f"{', '.join([x.name for x in specs])}  it's ☕ time!")
+        else:
+            embed = discord.Embed()
+            url = random_gif(apikey, random.choice(["everyone", "war"]))
+            embed.set_image(url=url)
+            await ctx.channel.send(f"Everyone can play!\n{[x.name for x in reactors]}",  embed=embed)
 
 
 bot = commands.Bot(command_prefix="$")

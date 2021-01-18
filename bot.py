@@ -97,7 +97,7 @@ class Greetings(commands.Cog):
             specs = reactors[8:]
             await ctx.channel.send(f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(specs)}", embed=embed)
         else:
-            await ctx.channel.send(f"Everyone can play!\n{[x.name for x in reactors]}", embed=embed)
+            await ctx.channel.send(f"Everyone can play!\n{', '.join(reactors)}", embed=embed)
 
 
 bot = commands.Bot(command_prefix="$")

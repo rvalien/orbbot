@@ -1,3 +1,8 @@
+__author__ = "Valien"
+__version__ = "0.0.5"
+__maintainer__ = "Valien"
+__link__ = "https://github.com/rvalien"
+
 from discord.ext import commands
 from moduls import random_gif, random_map
 
@@ -5,13 +10,6 @@ import asyncio
 import discord
 import os
 import random
-import sys
-
-print("init bot")
-if sys.platform == "win32":
-    from config import *
-
-    print("local execute")
 
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]

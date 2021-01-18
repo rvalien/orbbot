@@ -17,7 +17,7 @@ token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
 
 
-class Greetings(commands.Cog):
+class OrbbCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -36,7 +36,7 @@ class Greetings(commands.Cog):
 
     @commands.command()
     async def profile(self, ctx, *, member=None):
-        """😸 show quake profile link `$profile somename`"""
+        """😸 Show quake profile link `$profile some_name`"""
         if member:
             await ctx.send(f"https://stats.quake.com/profile/{member}")
         else:
@@ -44,7 +44,7 @@ class Greetings(commands.Cog):
 
     @commands.command()
     async def map(self, ctx, *, member: discord.Member = None):
-        """"🗺️ chose random map"""
+        """🗺️ Choose random map"""
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}")
 
@@ -75,7 +75,7 @@ class Greetings(commands.Cog):
 
     @commands.command()
     async def spec(self, ctx, *, member: discord.Member = None):
-        """Spectator random choice if player more than 8"""
+        """If player more than 8, 👁️bot choose random spectators. """
 
         msg = await ctx.channel.send("Who wanna play now? Add you reaction bellow ⬇️")
         for emoji in ["✅", "❌"]:
@@ -101,5 +101,5 @@ class Greetings(commands.Cog):
 
 
 bot = commands.Bot(command_prefix="$")
-bot.add_cog(Greetings(bot))
+bot.add_cog(OrbbCommands(bot))
 bot.run(token)

@@ -17,9 +17,9 @@ Orbb can help:
 ---
 ### setup
 to run this bot, you need to set environment variables:  
-`TOKEN` - discord bot token (https://discord.com/developers/docs/intro)  
-`TENSOR_API_KEY` gifapi token (https://tenor.com/gifapi/documentation)
+`TOKEN` - [discord](https://discord.com/developers/docs/intro) bot token  
+`TENSOR_API_KEY`- [gifapi](https://tenor.com/gifapi/documentation) token 
 
 ---
 ### deploy
-you can use https://www.heroku.com/
+you can use [heroku](https://www.heroku.com/)

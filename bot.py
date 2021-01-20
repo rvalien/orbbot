@@ -97,6 +97,57 @@ class OrbbCommands(commands.Cog):
         else:
             await ctx.channel.send(f"Everyone can play!\n{', '.join(reactors)}", embed=embed)
 
+    @commands.command()
+    async def pzdc(self, ctx, *, member: discord.Member = None):
+        """это пиздец"""
+
+        heroes = (
+            "Anarki",
+            "Athena",
+            "B.J. Blazkowicz",
+            "Clutch",
+            "Death Knight",
+            "Doom Slayer",
+            "Eisen",
+            "Galena",
+            "Keel",
+            "Nyx",
+            "Ranger",
+            "ScaleBearer",
+            "Slash",
+            "Sorlag",
+            "Strogg & Peeker",
+            "Visor",
+        )
+        if ctx.message.author.voice:
+            voice_channel = ctx.message.author.voice.channel
+            all_members = voice_channel.members
+            print(all_members)
+            if not all_members:
+                await ctx.send("🤖 beep boop.. need more time to calculate")
+            else:
+                random.shuffle(all_members)
+                separator = len(all_members) // 2
+                team1 = list(all_members[:separator])
+                team2 = list(all_members[separator:])
+
+                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", tts=False)
+
+                if team1:
+                    await ctx.send(
+                        f'**team** 🌻: {", ".join(map(lambda x: f"{x.name} = {random.choice(heroes)}", team1))}',
+                        tts=False)
+                if team2:
+                    await ctx.send(
+                        f'**team** ❄️: {", ".join(map(lambda x: f"{x.name} = {random.choice(heroes)}", team2))}',
+                        tts=False)
+
+            icon, text = random_map()
+            await ctx.send(f"{icon}\n{text}")
+
+        else:
+            await ctx.send("voice channel is empty", tts=False)
+
 
 bot = commands.Bot(command_prefix="$")
 bot.add_cog(OrbbCommands(bot))

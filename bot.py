@@ -75,7 +75,7 @@ class OrbbCommands(commands.Cog):
     async def spec(self, ctx, *, member: discord.Member = None):
         """If player more than 8, 👁️bot choose random spectators. """
 
-        msg = await ctx.channel.send("Who wanna play now? Add you reaction bellow ⬇️")
+        msg = await ctx.channel.send("@here Who wanna play now? Add you reaction bellow ⬇️")
         for emoji in ["✅", "❌"]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(20)

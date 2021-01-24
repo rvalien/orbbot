@@ -38,7 +38,7 @@ class OrbbCommands(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def teams(self, ctx, *, anything=None):
+    async def team(self, ctx, *, anything=None):
         """👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
         You can type any word or number as a message after `$team` command.
         If message passed: Bot sends a message and shuffles members who react with emoji on it.

@@ -57,16 +57,15 @@ class OrbbCommands(commands.Cog):
                 await ctx.send("🤖 beep boop.. no one wants")
             else:
                 random.shuffle(all_members)
-                random.shuffle(all_members)
+                random.shuffle(all_members)  # double random
                 separator = len(all_members) // 2
                 team1 = list(all_members[:separator])
                 team2 = list(all_members[separator:])
-
                 await ctx.send("let's shuffle all persons who react my message", tts=False)
                 if team1:
-                    await ctx.send(f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}', tts=False)
+                    await ctx.send(f'**team** 🌻: {", ".join(team1)}', tts=False)
                 if team2:
-                    await ctx.send(f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}', tts=False)
+                    await ctx.send(f'**team** ❄️: {", ".join(team2)}', tts=False)
 
         else:
             if ctx.message.author.voice:

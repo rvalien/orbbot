@@ -21,18 +21,6 @@ class OrbbCommands(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    async def hi(self, ctx, *, member: discord.Member = None):
-        """👋 just hello"""
-        member = member or ctx.author
-        channel = member.guild.system_channel
-        async with channel.typing():
-            await asyncio.sleep(0.5)
-        if self._last_member is None or self._last_member.id != member.id:
-            await ctx.send("Hello {0.name}~".format(member))
-        else:
-            await ctx.send("Hello {0.name}... This feels familiar.".format(member))
-
-    @commands.command()
     async def profile(self, ctx, *, member=None):
         """😸 Show quake profile link `$profile some_name`"""
         if member:
@@ -47,14 +35,26 @@ class OrbbCommands(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def team(self, ctx, *, member: discord.Member = None):
-        """👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams"""
-        if ctx.message.author.voice:
-            voice_channel = ctx.message.author.voice.channel
-            all_members = voice_channel.members
-            print(all_members)
+    async def team(self, ctx, *, anything=None):
+        """👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
+        You can type any word or number as a message after `$team` command.
+        If message passed: Bot sends a message and shuffles members who react with emoji on it.
+        If message not passed: Bot shuffles members from voice channel."""
+        if anything:
+            msg = await ctx.channel.send("@here Who wanna play now? Add you reaction bellow ⬇️")
+            for emoji in ["✅", "❌"]:
+                await msg.add_reaction(emoji)
+            await asyncio.sleep(20)
+            msg = await ctx.channel.fetch_message(msg.id)
+            # get reactors who react first emoji
+            reactors = await msg.reactions[0].users().flatten()
+            # remove bots
+            reactors = list(filter(lambda x: not x.bot, reactors))
+            # get only names
+            all_members = list(map(lambda x: x.name, reactors))
+
             if not all_members:
-                await ctx.send("🤖 beep boop.. need more time to calculate")
+                await ctx.send("🤖 beep boop.. no one wants")
             else:
                 random.shuffle(all_members)
                 random.shuffle(all_members)
@@ -62,20 +62,37 @@ class OrbbCommands(commands.Cog):
                 team1 = list(all_members[:separator])
                 team2 = list(all_members[separator:])
 
-                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", tts=False)
-
+                await ctx.send("let's shuffle all persons who react my message", tts=False)
                 if team1:
                     await ctx.send(f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}', tts=False)
                 if team2:
                     await ctx.send(f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}', tts=False)
+
         else:
-            await ctx.send("voice channel is empty", tts=False)
+            if ctx.message.author.voice:
+                voice_channel = ctx.message.author.voice.channel
+                all_members = voice_channel.members
+                if not all_members:
+                    await ctx.send("🤖 beep boop.. need more time to calculate")
+                else:
+                    random.shuffle(all_members)
+                    random.shuffle(all_members)
+                    separator = len(all_members) // 2
+                    team1 = list(all_members[:separator])
+                    team2 = list(all_members[separator:])
+                    await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", tts=False)
+                    if team1:
+                        await ctx.send(f'**team** 🌻: {", ".join(map(lambda x: x.name, team1))}', tts=False)
+                    if team2:
+                        await ctx.send(f'**team** ❄️: {", ".join(map(lambda x: x.name, team2))}', tts=False)
+            else:
+                await ctx.send("voice channel is empty", tts=False)
 
     @commands.command()
     async def spec(self, ctx, *, member: discord.Member = None):
         """If player more than 8, 👁️bot choose random spectators. """
 
-        msg = await ctx.channel.send("@here Who wanna play now? Add you reaction bellow ⬇️")
+        msg = await ctx.channel.send("@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️")
         for emoji in ["✅", "❌"]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(20)

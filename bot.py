@@ -122,7 +122,7 @@ class OrbbCommands(commands.Cog):
     async def pzdc(self, ctx, *, member: discord.Member = None):
         """это пиздец"""
 
-        heroes = (
+        heroes = [
             "Anarki",
             "Athena",
             "B.J. Blazkowicz",
@@ -139,7 +139,7 @@ class OrbbCommands(commands.Cog):
             "Sorlag",
             "Strogg & Peeker",
             "Visor",
-        )
+        ]
         if ctx.message.author.voice:
             voice_channel = ctx.message.author.voice.channel
             all_members = voice_channel.members

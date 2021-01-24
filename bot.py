@@ -10,9 +10,12 @@ import asyncio
 import discord
 import os
 import random
+import logging
 
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
+
+logger = logging.getLogger(__name__)
 
 
 class OrbbCommands(commands.Cog):
@@ -35,12 +38,12 @@ class OrbbCommands(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def team(self, ctx, *, anything=None):
+    async def teams(self, ctx, *, anything=None):
         """👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
         You can type any word or number as a message after `$team` command.
         If message passed: Bot sends a message and shuffles members who react with emoji on it.
         If message not passed: Bot shuffles members from voice channel."""
-        if anything:
+        if not anything:
             msg = await ctx.channel.send("@here Who wanna play now? Add you reaction bellow ⬇️")
             for emoji in ["✅", "❌"]:
                 await msg.add_reaction(emoji)
@@ -165,6 +168,7 @@ class OrbbCommands(commands.Cog):
             await ctx.send("voice channel is empty", tts=False)
 
 
+logger.info("Программа стартует")
 bot = commands.Bot(command_prefix="$")
 bot.add_cog(OrbbCommands(bot))
 bot.run(token)

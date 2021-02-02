@@ -4,7 +4,7 @@ __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien"
 
 from discord.ext import commands
-from moduls import random_gif, random_map, text_formatter
+from moduls import random_gif, random_map, text_formatter, get_members_voice
 
 import asyncio
 import discord
@@ -45,10 +45,15 @@ class OrbbCommands(commands.Cog):
         If message not passed: Bot shuffles members from voice channel."""
         if not anything:
             msg = await ctx.channel.send("@here Who wanna play now? Add you reaction bellow ⬇️")
-            for emoji in ["✅", "❌"]:
+            for emoji in ["✅", "❌", "🔟"]:
                 await msg.add_reaction(emoji)
-            await asyncio.sleep(20)
+            await asyncio.sleep(5)
             msg = await ctx.channel.fetch_message(msg.id)
+            await msg.remove_reaction(emoji="🔟", member=msg.author)
+            await msg.add_reaction("5️⃣")
+            await asyncio.sleep(5)
+            await msg.remove_reaction(emoji="5️⃣", member=msg.author)
+            await msg.add_reaction("🛑")
             # get reactors who react first emoji
             logger.info(msg.reactions, msg.reactions[0].users().flatten(), msg.reactions[1].users().flatten())
             reactors = await msg.reactions[0].users().flatten()
@@ -56,7 +61,7 @@ class OrbbCommands(commands.Cog):
             reactors = list(filter(lambda x: not x.bot, reactors))
             # get only names
             all_members = list(map(lambda x: x.name, reactors))
-
+            # voice_members = get_members_voice(ctx)
             if not all_members:
                 await ctx.send("🤖 beep boop.. no one wants")
             else:
@@ -96,9 +101,15 @@ class OrbbCommands(commands.Cog):
         """If player more than 8, 👁️bot choose random spectators. """
 
         msg = await ctx.channel.send("@here Who wanna play? Add you reaction bellow ⬇️")
-        for emoji in ["✅", "❌"]:
+        for emoji in ["✅", "❌", "🔟"]:
             await msg.add_reaction(emoji)
-        await asyncio.sleep(20)
+        await asyncio.sleep(5)
+        msg = await ctx.channel.fetch_message(msg.id)
+        await msg.remove_reaction(emoji="🔟", member=msg.author)
+        await msg.add_reaction("5️⃣")
+        await asyncio.sleep(5)
+        await msg.remove_reaction(emoji="5️⃣", member=msg.author)
+        await msg.add_reaction("🛑")
         msg = await ctx.channel.fetch_message(msg.id)
         # get reactors who react first emoji
         reactors = await msg.reactions[0].users().flatten()
@@ -143,9 +154,15 @@ class OrbbCommands(commands.Cog):
 
         # all_members = get_members_voice(ctx)
         msg = await ctx.channel.send("@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️")
-        for emoji in ["✅", "❌"]:
+        for emoji in ["✅", "❌", "🔟"]:
             await msg.add_reaction(emoji)
-        await asyncio.sleep(time)
+        await asyncio.sleep(time / 2)
+        msg = await ctx.channel.fetch_message(msg.id)
+        await msg.remove_reaction(emoji="🔟", member=msg.author)
+        await msg.add_reaction("5️⃣")
+        await asyncio.sleep(time / 2)
+        await msg.remove_reaction(emoji="5️⃣", member=msg.author)
+        await msg.add_reaction("🛑")
         msg = await ctx.channel.fetch_message(msg.id)
         reactors = await msg.reactions[0].users().flatten()
         reactors = list(filter(lambda x: not x.bot, reactors))

@@ -1,5 +1,5 @@
 __author__ = "Valien"
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien"
 

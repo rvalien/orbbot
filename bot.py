@@ -83,7 +83,6 @@ class OrbbCommands(commands.Cog):
             await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
             await msg.add_reaction(VOTE_REACT.get("stop"))
             # get reactors who react first emoji
-            logger.info(msg.reactions, msg.reactions[0].users().flatten(), msg.reactions[1].users().flatten())
             reactors = await msg.reactions[0].users().flatten()
             # remove bots
             reactors = list(filter(lambda x: not x.bot, reactors))
@@ -97,7 +96,7 @@ class OrbbCommands(commands.Cog):
 
         if all_members:
             players, spectators = get_random_spectators_and_players(all_members)
-            separator = len(players) / 2
+            separator = int(len(players) / 2)
             team1 = list(players[:separator])
             team2 = list(players[separator:])
 
@@ -176,7 +175,7 @@ class OrbbCommands(commands.Cog):
         emojies = list(map(str, emojies))
 
         players, spectators = get_random_spectators_and_players(all_members)
-        separator = len(players) / 2
+        separator = int(len(players) / 2)
         team1 = list(players[:separator])
         team2 = list(players[separator:])
 

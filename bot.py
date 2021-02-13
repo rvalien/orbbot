@@ -1,10 +1,10 @@
 __author__ = "Valien"
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien"
 
 from discord.ext import commands
-from moduls import random_gif, random_map, text_formatter, get_members_voice
+from moduls import random_gif, random_map, text_formatter, get_random_spectators_and_players, get_members_voice
 
 import asyncio
 import discord
@@ -66,9 +66,10 @@ class OrbbCommands(commands.Cog):
         You can type any word or number as a message after `$team` command.
         If message passed: Bot sends a message and shuffles members who react with emoji on it.
         If message not passed: Bot shuffles members from voice channel."""
+        all_members = list()
         if not anything:
             async with ctx.typing():
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.5)
             msg = await ctx.channel.send(
                 f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)"""
             )
@@ -88,44 +89,27 @@ class OrbbCommands(commands.Cog):
             reactors = list(filter(lambda x: not x.bot, reactors))
             # get only names
             all_members = list(map(lambda x: x.name, reactors))
-            # voice_members = get_members_voice(ctx)
-            if not all_members:
-                await ctx.send("🤖 beep boop.. no one wants")
-            else:
-                random.shuffle(all_members)
-                random.shuffle(all_members)  # double random
-                separator = len(all_members) // 2
-                team1 = list(all_members[:separator])
-                team2 = list(all_members[separator:])
-                await ctx.send("let's shuffle all persons who **react** my message", tts=False)
-                if team1:
-                    await ctx.send(f'\n**team** 🌻: {", ".join(team1)}', tts=False)
-                if team2:
-                    await ctx.send(f'\n**team** ❄️: {", ".join(team2)}', tts=False)
 
         else:
-            if ctx.message.author.voice:
-                voice_channel = ctx.message.author.voice.channel
-                all_members = voice_channel.members
-                if not all_members:
-                    async with ctx.typing():
-                        await asyncio.sleep(1)
-                    await ctx.send("🤖 beep boop.. need more time to calculate")
-                else:
-                    random.shuffle(all_members)
-                    random.shuffle(all_members)
-                    separator = len(all_members) // 2
-                    team1 = list(all_members[:separator])
-                    team2 = list(all_members[separator:])
-                    async with ctx.typing():
-                        await asyncio.sleep(1)
-                    await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", tts=False)
-                    if team1:
-                        await ctx.send(f'\n**team** 🍄: {", ".join(map(lambda x: x.name, team1))}', tts=False)
-                    if team2:
-                        await ctx.send(f'\n**team** 🍁: {", ".join(map(lambda x: x.name, team2))}', tts=False)
-            else:
-                await ctx.send("voice channel is empty", tts=False)
+            voice_channel = ctx.message.author.voice.channel
+            await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
+            all_members = get_members_voice(ctx)
+
+        if all_members:
+            players, spectators = get_random_spectators_and_players(all_members)
+            separator = len(players) / 2 if len(players) / 2 else 1
+            team1 = list(players[:separator])
+            team2 = list(players[separator:])
+
+            await ctx.send("let's shuffle all persons who **react** my message")
+            if team1:
+                await ctx.send(f'\n**team** 🌻: {", ".join(team1)}\n')
+            if team2:
+                await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n')
+            if spectators:
+                await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}\n", tts=True)
+        else:
+            await ctx.send(f"\nIs there anyone alive?\n")
 
     @commands.command()
     async def spec(self, ctx, *, time=VOTE_TIME):
@@ -152,16 +136,17 @@ class OrbbCommands(commands.Cog):
         reactors = list(filter(lambda x: not x.bot, reactors))
         # get only names
         reactors = list(map(lambda x: x.name, reactors))
+        players, spectators = get_random_spectators_and_players(reactors)
+        logger.info(f"command spec:\n{reactors=}\n{players=}\n{spectators=}\n")
+
         embed = discord.Embed()
         url = random_gif(apikey, random.choice(["team play", "fight", "war"]))
         embed.set_image(url=url)
-        if len(reactors) > 8:
-            random.shuffle(reactors)
-            players = reactors[:8]
-            specs = reactors[8:]
-            await ctx.channel.send(f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(specs)}", embed=embed)
-        else:
-            await ctx.channel.send(f"Everyone can play!\n{', '.join(reactors)}", embed=embed)
+
+        spec_mess = (f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(spectators)}",)
+        no_spec_mess = (f"Everyone can play!\n{', '.join(players)}",)
+        logger.info(f"command spec\n, {reactors=}\n{players=}\n{spectators}\n")
+        await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed)
 
     @commands.command()
     async def pzdc(self, ctx, *, time=VOTE_TIME):
@@ -189,21 +174,22 @@ class OrbbCommands(commands.Cog):
         emojies = list(map(lambda x: x.get("emoji"), HEROES))
         emojies = list(map(lambda x: discord.utils.get(bot.emojis, name=x), emojies))
         emojies = list(map(str, emojies))
-        random.shuffle(all_members)
 
-        separator = len(all_members) // 2
-
-        team1 = list(all_members[:separator])
-        team2 = list(all_members[separator:])
+        players, spectators = get_random_spectators_and_players(all_members)
+        separator = len(players) / 2 if len(players) / 2 else 1
+        team1 = list(players[:separator])
+        team2 = list(players[separator:])
 
         random.shuffle(emojies)
         team1 = [list(tup) for tup in zip(team1, emojies[:separator])]
 
         random.shuffle(emojies)
         team2 = [list(tup) for tup in zip(team2, emojies[: len(team2)])]
-
+        logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
         await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", tts=False)
         await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", tts=False)
+        if spectators:
+            await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}")
 
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}")

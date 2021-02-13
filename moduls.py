@@ -1,7 +1,9 @@
 import json
 import random
 import requests
-import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def random_gif(apikey, search_term, lmt=8):
@@ -16,8 +18,8 @@ def random_gif(apikey, search_term, lmt=8):
     if r.status_code in (200, 202):
         return gif_url
     else:
-        print(r.content)
-        print(r.status_code)
+        logger.warning(r.status_code)
+        logger.warning(r.content)
 
 
 def random_map():
@@ -80,3 +82,24 @@ def text_formatter(team: list) -> str:
         text += " - ".join(i)
         text += "\n"
     return text
+
+
+def get_random_spectators_and_players(all_players: list) -> tuple:
+    """
+    simple function, that randomize list of players
+    split list into players and spectators
+    players list less or equal 8 and divisible by two
+    :param all_players: list
+    :return: tuple with 2 list
+    """
+
+    random.shuffle(all_players)
+    logger.info("input:", len(all_players))
+    if len(all_players) > 8:
+        separator = 8
+    else:
+        separator = len(all_players) // 2 * 2
+
+    players = all_players[:separator]
+    spectators = all_players[separator:]
+    return players, spectators

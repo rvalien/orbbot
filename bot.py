@@ -97,7 +97,7 @@ class OrbbCommands(commands.Cog):
 
         if all_members:
             players, spectators = get_random_spectators_and_players(all_members)
-            separator = len(players) / 2 if len(players) / 2 else 1
+            separator = len(players) / 2
             team1 = list(players[:separator])
             team2 = list(players[separator:])
 
@@ -176,7 +176,7 @@ class OrbbCommands(commands.Cog):
         emojies = list(map(str, emojies))
 
         players, spectators = get_random_spectators_and_players(all_members)
-        separator = len(players) / 2 if len(players) / 2 else 1
+        separator = len(players) / 2
         team1 = list(players[:separator])
         team2 = list(players[separator:])
 

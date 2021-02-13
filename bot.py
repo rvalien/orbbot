@@ -114,7 +114,7 @@ class OrbbCommands(commands.Cog):
     async def spec(self, ctx, *, time=VOTE_TIME):
         """If player more than 8, 👁️bot choose random spectators. """
         async with ctx.typing():
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
             f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)"""
         )
@@ -151,7 +151,7 @@ class OrbbCommands(commands.Cog):
         """random map, character and team shuffle"""
         # all_members = get_members_voice(ctx)
         async with ctx.typing():
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
             f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)'
         )

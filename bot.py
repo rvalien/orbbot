@@ -130,7 +130,6 @@ class OrbbCommands(commands.Cog):
         msg = await ctx.channel.fetch_message(msg.id)
         # get reactors who react first emoji
         reactors = await msg.reactions[0].users().flatten()
-        logger.info(msg.reactions, msg.reactions[0].users().flatten(), msg.reactions[1].users().flatten())
         # remove bots
         reactors = list(filter(lambda x: not x.bot, reactors))
         # get only names

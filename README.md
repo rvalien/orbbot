@@ -8,12 +8,13 @@ lil bot for lil discord channel
 ---
 ### usage
 Orbb can help:  
-`$hi`      👋 just hello  
 `$map`     🗺️ choose random map  
 `$profile` 😸 show quake profile link `$profile some_name`  
 `$spec`    If player more than 8, 👁️bot choose random spectators.  
 `$team`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams  
+`$pzdc`    OMG mode! Random team, map and character. prepare to suffer.
 `$help`    Shows this message
+
 
 ---
 ### setup

@@ -1,8 +1,7 @@
 # orbbot
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-![](./orbb.png)
-<img src="orbb.png" width="200">
+<img src="orbb.png" width="100">
 ### description
 lil bot for lil discord channel
 ---

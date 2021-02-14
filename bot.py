@@ -88,7 +88,7 @@ class OrbbCommands(commands.Cog):
             reactors = list(filter(lambda x: not x.bot, reactors))
             # get only names
             all_members = list(map(lambda x: x.name, reactors))
-
+            await ctx.send("let's shuffle all persons who **react** my message")
         else:
             voice_channel = ctx.message.author.voice.channel
             await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
@@ -100,7 +100,6 @@ class OrbbCommands(commands.Cog):
             team1 = list(players[:separator])
             team2 = list(players[separator:])
 
-            await ctx.send("let's shuffle all persons who **react** my message")
             if team1:
                 await ctx.send(f'\n**team** 🌻: {", ".join(team1)}\n')
             if team2:

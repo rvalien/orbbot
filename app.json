@@ -1,19 +1,29 @@
 {
-  "name": "orbbot",
-  "description": "lil bot for lil discord QC channel",
-  "repository": "https://github.com/rvalien/orbbot",
-  "env": {
-    "TOKEN": {
-      "description": "Discord token used to log in",
-      "required": true
+    "name": "orbbot",
+    "description": "lil bot for lil discord QC channel.",
+    "repository": "https://github.com/rvalien/orbbot",
+    "env": {
+        "TOKEN": {
+            "description": "Your discord bot's token.",
+            "required": true
+        },
+        "PREFIX": {
+            "description": "Command prefix to use.",
+            "required": true
+        },
+        "TENSOR_API_KEY": {
+            "description": "Token for tenor.com api usage.",
+            "required": true
+        },
+        "GITHUB_TOKEN": {
+            "description": "A github personal access token with the repo scope.",
+            "required": false
+        }
     },
-    "PREFIX": {
-      "description": "Command prefix to use.",
-      "required": true
-    },
-    "TENSOR_API_KEY": {
-      "description": "Token for tenor.com api usage.",
-      "required": true
-    }
-  }
+    "keywords": [
+    "discord-bot",
+    "QC",
+    "discord.py",
+    "team manager"
+  ]
 }

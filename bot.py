@@ -16,7 +16,6 @@ token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
 prefix = os.environ["PREFIX"]
 
-
 logger = logging.getLogger(__name__)
 
 VOTE_REACT = {"yes": "✅", "no": "❌", "time": "🔟", "half_time": "5️⃣", "stop": "🛑"}
@@ -68,7 +67,8 @@ class OrbbCommands(commands.Cog):
         You can type any word or number as a message after `$team` command.
         If message passed: Bot sends a message and shuffles members who react with emoji on it.
         If message not passed: Bot shuffles members from voice channel."""
-        all_members = list()
+        voice_channel = ctx.message.author.voice.channel
+
         if not anything:
             async with ctx.typing():
                 await asyncio.sleep(0.5)
@@ -92,7 +92,6 @@ class OrbbCommands(commands.Cog):
             all_members = list(map(lambda x: x.name, reactors))
             await ctx.send("let's shuffle all persons who **react** my message")
         else:
-            voice_channel = ctx.message.author.voice.channel
             await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
             all_members = get_members_voice(ctx)
 
@@ -107,9 +106,9 @@ class OrbbCommands(commands.Cog):
             if team2:
                 await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n')
             if spectators:
-                await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}\n", tts=True)
+                await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}\n")
         else:
-            await ctx.send(f"\nIs there anyone alive?\n")
+            await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n")
 
     @commands.command()
     async def spec(self, ctx, *, time=VOTE_TIME):
@@ -150,7 +149,6 @@ class OrbbCommands(commands.Cog):
     @commands.command()
     async def pzdc(self, ctx, *, time=VOTE_TIME):
         """random map, character and team shuffle"""
-        # all_members = get_members_voice(ctx)
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
@@ -185,8 +183,8 @@ class OrbbCommands(commands.Cog):
         random.shuffle(emojies)
         team2 = [list(tup) for tup in zip(team2, emojies[: len(team2)])]
         logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
-        await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", tts=False)
-        await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", tts=False)
+        await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n")
+        await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n")
         if spectators:
             await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}")
 

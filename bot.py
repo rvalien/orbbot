@@ -14,6 +14,8 @@ import logging
 
 token = os.environ["TOKEN"]
 apikey = os.environ["TENSOR_API_KEY"]
+prefix = os.environ["PREFIX"]
+
 
 logger = logging.getLogger(__name__)
 
@@ -193,6 +195,6 @@ class OrbbCommands(commands.Cog):
 
 
 logger.info("run")
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix=prefix)
 bot.add_cog(OrbbCommands(bot))
 bot.run(token)

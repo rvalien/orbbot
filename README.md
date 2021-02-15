@@ -26,7 +26,7 @@ to run this bot, you need to set environment variables:
 `PREFIX` - Command prefix to use  
 ---
 ### deploy
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/rvalien/orbbot/tree/rewrite)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/rvalien/orbbot)
 
 
 Wanna new features? [Create an issue](https://github.com/rvalien/orbbot/issues) on this repo.

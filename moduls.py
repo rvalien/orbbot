@@ -6,6 +6,27 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+HEROES = [
+    {"name": "Anarki", "emoji": "Anarki"},
+    {"name": "Athena", "emoji": "Athena"},
+    {"name": "B.J. Blazkowicz", "emoji": "BJ"},
+    {"name": "Clutch", "emoji": "Clutch"},
+    {"name": "Death Knight", "emoji": "DeathKnight"},
+    {"name": "Doom Slayer", "emoji": "Doom"},
+    {"name": "Eisen", "emoji": "Eisen"},
+    {"name": "Galena", "emoji": "Galena"},
+    {"name": "Keel", "emoji": "Keel"},
+    {"name": "Nyx", "emoji": "Nyx"},
+    {"name": "Ranger", "emoji": "Ranger"},
+    {"name": "ScaleBearer", "emoji": "Scalebearer"},
+    {"name": "Slash", "emoji": "Slash"},
+    {"name": "Sorlag", "emoji": "Sorlag"},
+    {"name": "Strogg", "emoji": "Strogg"},
+    {"name": "Visor", "emoji": "Visor"},
+]
+
+
+
 def random_gif(apikey, search_term, lmt=8):
     r = requests.get(f"https://api.tenor.com/v1/random?q={search_term}&key={apikey}&limit={lmt}")
     if r.status_code == 200:

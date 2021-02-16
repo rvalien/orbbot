@@ -14,17 +14,18 @@ lil bot for lil discord [QC](https://quake.bethesda.net/en) channel
 ### usage
 
 Orbb can help:  
-`$map`     🗺️ choose random map  
-`$profile` 😸 show quake profile link `$profile some_name`  
-`$spec`    Bot send vote message with question like: `Who want to play now?` If player, that set positive reaction, more
+`map`     🗺️ choose random map  
+`profile` 😸 show quake profile link `profile some_name`  
+`spec`    Bot send vote message with question like: `Who want to play now?` If player, that set positive reaction, more
 than 8, bot choose random spectators.  
-`$team`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams and spectators  
-`$team anything`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members who set positive reaction to 2 teams and spectators  
-`$pzdc`    OMG mode! Random team, map and character. Prepare to suffer.  
-`$help`    Shows this message and more info for commands.
+`team`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members of voice channel to 2 teams and spectators  
+`team anything`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members who set positive reaction to 2 teams and spectators  
+`pzdc`    OMG mode! Random team, map and character. Prepare to suffer.  
+`ping` used to check if the bot is alive  
+`help`    Shows this message and more info for commands.
 
 #### info:
-in `$pzdc` & `$team anything` command use emoji vote mode.
+in `pzdc` & `team anything` command use emoji vote mode.
 You need to react on bot vote message.  
 example:  
 ![](./vote_exmpl.png)

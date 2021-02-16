@@ -22,7 +22,8 @@ than 8, bot choose random spectators.
 `team anything`    👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 shuffle members who set positive reaction to 2 teams and spectators  
 `pzdc`    OMG mode! Random team, map and character. Prepare to suffer.  
 `ping` used to check if the bot is alive  
-`help`    Shows this message and more info for commands.
+`help`    Shows this message and more info for commands.  
+`poll` simple poll with only 2 reactions (👍, 👎)  
 
 #### info:
 in `pzdc` & `team anything` command use emoji vote mode.

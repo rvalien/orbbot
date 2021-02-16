@@ -1,3 +1,7 @@
+"""
+commands for QC game
+"""
+
 import asyncio
 import discord
 import os
@@ -12,19 +16,6 @@ VOTE_REACT = {"yes": "✅", "no": "❌", "time": "🔟", "half_time": "5️⃣",
 VOTE_TIME = 10
 
 logger = logging.getLogger(__name__)
-
-
-class Listener(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self._last_member = None
-
-    @commands.Cog.listener("on_message")
-    async def war(self, message):
-        war = "война"
-        if war in message.content.casefold():
-            await message.channel.send("ВОЙНЯЯЯЯЯ!!!!")
-            await self.bot.process_commands(message)
 
 
 class Commands(commands.Cog):
@@ -188,13 +179,6 @@ class Commands(commands.Cog):
 
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}")
-
-    @commands.command()
-    async def ping(self, ctx):
-        """
-        used to check if the bot is alive
-        """
-        await ctx.send(f"pong! {round(self.bot.latency * 1000)} ms")
 
 
 def setup(bot):

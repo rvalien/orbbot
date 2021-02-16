@@ -5,7 +5,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
 HEROES = [
     {"name": "Anarki", "emoji": "Anarki"},
     {"name": "Athena", "emoji": "Athena"},
@@ -26,7 +25,6 @@ HEROES = [
 ]
 
 
-
 def random_gif(apikey, search_term, lmt=8):
     r = requests.get(f"https://api.tenor.com/v1/random?q={search_term}&key={apikey}&limit={lmt}")
     if r.status_code == 200:
@@ -45,12 +43,12 @@ def random_gif(apikey, search_term, lmt=8):
 
 def random_map():
     map_dict = {
-        "🕳️": "Карта Church of Azathoth «Церковь Азатот»",
-        "🟩": "Карта Tempest Shrine «Храм Бури»",
-        "🔒📦": "Карта Lockbox",
-        "🟥🦎": "Карта Burial Chamber «Погребальная камера»",
-        "👁️": "Карта Ruins of Sartnath «Развалины Сарната»",
-        "🟦": "Карта Blood Covenant «Кровавый ковенант»",
+        "🕳️": "Church of Azathoth",
+        "🟩": "Tempest Shrine",
+        "🔒📦": "Lockbox",
+        "🟥🦎": "Burial Chamber",
+        "👁️": "Ruins of Sartnath",
+        "🟦": "Blood Covenant",
     }
     key = random.choice(list(map_dict.keys()))
     return key, map_dict[key]
@@ -68,20 +66,6 @@ def get_members_voice(context):
             return list_of_names
     else:
         return None
-
-
-# TODO не работает потому что асинхронно надо уметь
-# async def get_members_react(context, time=20):
-#     msg = await context.channel.send("@here Who wanna play? Add you reaction bellow ⬇️")
-#     for emoji in ["✅", "❌"]:
-#         await msg.add_reaction(emoji)
-#     await asyncio.sleep(time)
-#     msg = await context.channel.fetch_message(msg.id)
-#     reactors = await msg.reactions[0].users().flatten()
-#     reactors = list(filter(lambda x: not x.bot, reactors))
-#     reactors = list(map(lambda x: x.name, reactors))
-#
-#     return reactors
 
 
 def text_formatter(team: list) -> str:

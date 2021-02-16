@@ -12,7 +12,7 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def war(self, message):
-        war = "война"
+        war = " война"
         if war in message.content.casefold():
             await message.channel.send("ВОЙНЯЯЯЯЯ!!!!")
             await self.bot.process_commands(message)

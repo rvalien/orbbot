@@ -5,7 +5,7 @@ from discord.ext import commands
 reactions = ["👍", "👎"]
 
 
-class Poll(commands.Cog):
+class SimpleCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -27,8 +27,8 @@ class Poll(commands.Cog):
         """
         used to check if the bot is alive
         """
-        await ctx.send(f"pong! {round(self.bot.latency * 1000)} ms")
+        await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms")
 
 
 def setup(bot):
-    bot.add_cog(Poll(bot))
+    bot.add_cog(SimpleCommands(bot))

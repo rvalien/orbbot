@@ -143,7 +143,7 @@ class Commands(commands.Cog):
         await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed)
 
     @commands.command()
-    async def pzdc1(self, ctx, *, time=VOTE_TIME):
+    async def pzdc(self, ctx, *, time=VOTE_TIME):
         """
         random map, character and team shuffle
         """

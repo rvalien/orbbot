@@ -36,7 +36,7 @@ class Commands(commands.Cog):
     @commands.command()
     async def map(self, ctx):
         """
-        🗺️ Choose random map"
+        🗺️ Choose random map
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
@@ -45,7 +45,7 @@ class Commands(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def team(self, ctx, *, anything=None, time=VOTE_TIME):
+    async def team(self, ctx, *, anything=None, time: int = VOTE_TIME):
         """
         👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
         You can type any word or number as a message after `$team` command.
@@ -96,7 +96,7 @@ class Commands(commands.Cog):
             await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n")
 
     @commands.command()
-    async def spec(self, ctx, *, time=VOTE_TIME):
+    async def spec(self, ctx, *, time: int = VOTE_TIME):
         """
         If player more than 8, 👁️bot choose random spectators.
         """
@@ -134,7 +134,7 @@ class Commands(commands.Cog):
         await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed)
 
     @commands.command()
-    async def pzdc(self, ctx, *, time=VOTE_TIME):
+    async def pzdc(self, ctx, *, time: int = VOTE_TIME):
         """
         random map, character and team shuffle
         """
@@ -157,20 +157,20 @@ class Commands(commands.Cog):
         reactors = list(filter(lambda x: not x.bot, reactors))
         all_members = list(map(lambda x: x.name, reactors))
 
-        emojies = list(map(lambda x: x.get("emoji"), HEROES))
-        emojies = list(map(lambda x: discord.utils.get(self.bot.emojis, name=x), emojies))
-        emojies = list(map(str, emojies))
+        emojis = list(map(lambda x: x.get("emoji"), HEROES))
+        emojis = list(map(lambda x: discord.utils.get(self.bot.emojis, name=x), emojis))
+        emojis = list(map(str, emojis))
 
         players, spectators = get_random_spectators_and_players(all_members)
         separator = int(len(players) / 2)
         team1 = list(players[:separator])
         team2 = list(players[separator:])
 
-        random.shuffle(emojies)
-        team1 = [list(tup) for tup in zip(team1, emojies[:separator])]
+        random.shuffle(emojis)
+        team1 = [list(tup) for tup in zip(team1, emojis[:separator])]
 
-        random.shuffle(emojies)
-        team2 = [list(tup) for tup in zip(team2, emojies[: len(team2)])]
+        random.shuffle(emojis)
+        team2 = [list(tup) for tup in zip(team2, emojis[: len(team2)])]
         logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
         await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n")
         await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n")

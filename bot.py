@@ -8,11 +8,16 @@ from discord.ext import commands
 import os
 import logging
 
-INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands"]
+INITIAL_EXTENSIONS = [
+    "cogs.qc",
+    "cogs.listeners",
+    "cogs.commands"
+]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 logger.info("run")
 bot = commands.Bot(command_prefix=prefix)

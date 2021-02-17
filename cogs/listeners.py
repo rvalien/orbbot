@@ -1,5 +1,5 @@
 from discord.ext import commands
-
+import discord
 import logging
 
 logger = logging.getLogger(__name__)
@@ -19,10 +19,10 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def kvad(self, message):
-        war = " квад"
+        war = "квад"
         if war in message.content.casefold():
-            await message.channel.send("Паша, kwad!")
-            await self.bot.process_commands(message)
+            emoji = discord.utils.get(self.bot.emojis, name="quad")
+            await message.add_reaction(emoji)
 
 
 def setup(bot):

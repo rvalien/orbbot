@@ -100,10 +100,13 @@ def get_random_spectators_and_players(all_players: list) -> tuple:
 
     random.shuffle(all_players)
     logger.info("input:", len(all_players))
-    if len(all_players) > 8:
-        separator = 8
-    else:
-        separator = len(all_players) // 2 * 2
+
+    separator = 8
+
+    # if len(all_players) > 8:
+    #     separator = 8
+    # else:
+    #     separator = len(all_players) // 2 * 2
 
     players = all_players[:separator]
     spectators = all_players[separator:]

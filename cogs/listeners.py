@@ -24,6 +24,14 @@ class Listener(commands.Cog):
             emoji = discord.utils.get(self.bot.emojis, name="quad")
             await message.add_reaction(emoji)
 
+    @commands.Cog.listener("on_message")
+    async def window(self, message):
+        war = "окно"
+        if war in message.content.casefold():
+            emoji = discord.utils.get(self.bot.emojis, name="window")
+            await message.add_reaction(emoji)
+
+
 
 def setup(bot):
     bot.add_cog(Listener(bot))

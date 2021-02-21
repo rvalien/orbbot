@@ -12,25 +12,23 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def war(self, message):
-        war = "война"
-        if war in message.content.casefold():
+        word = "война"
+        if word in message.content.casefold():
             await message.channel.send("ВОЙНЯЯЯЯЯ!!!!")
             await self.bot.process_commands(message)
 
     @commands.Cog.listener("on_message")
     async def kvad(self, message):
-        war = "квад"
-        if war in message.content.casefold():
+        word = "квад"
+        if word in message.content.casefold():
             emoji = discord.utils.get(self.bot.emojis, name="quad")
             await message.add_reaction(emoji)
 
     @commands.Cog.listener("on_message")
     async def window(self, message):
-        war = "окно"
-        if war in message.content.casefold():
-            emoji = discord.utils.get(self.bot.emojis, name="window")
-            await message.add_reaction(emoji)
-
+        word = "окно"
+        if word in message.content.casefold():
+            await message.add_reaction('🪟')
 
 
 def setup(bot):

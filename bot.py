@@ -12,8 +12,7 @@ import logging
 INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands"]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
-# token = os.environ["TEST_TOKEN"]
-# prefix = "!"
+token = os.environ["TEST_TOKEN"]
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

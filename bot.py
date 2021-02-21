@@ -1,5 +1,5 @@
 __author__ = "Valien"
-__version__ = "0.0.9"
+__version__ = "0.0.10"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
@@ -26,10 +26,15 @@ bot = commands.Bot(command_prefix=prefix, description="Small bot for lil QC comm
 async def on_ready():
     """http://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
 
-    print(f"\n\nLogged in as: {bot.user.name} - {bot.user.id}\nVersion: {discord.__version__}\n")
+    print(
+        f"""Logged in as: {bot.user.name} - {bot.user.id}\n
+        API version: {discord.__version__}\n
+        bot version: {__version__}"""
+    )
     game = discord.Game("Жмурки")
     await bot.change_presence(status=discord.Status.online, activity=game)
     print("beep-boop i'm online...!")
+    logger.info("beep-boop i'm online...!LOGER")
 
 
 if __name__ == "__main__":

@@ -9,10 +9,9 @@ import discord
 import os
 import logging
 
-INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands"]
+INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands", "cogs.games"]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
-token = os.environ["TEST_TOKEN"]
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -24,15 +23,11 @@ bot = commands.Bot(command_prefix=prefix, description="Small bot for lil QC comm
 @bot.event
 async def on_ready():
     """http://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
-
+    await bot.change_presence(status=discord.Status.idle)
     print(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     game = discord.Game("Жмурки")
     await bot.change_presence(status=discord.Status.online, activity=game)
     print("beep-boop i'm online...!")
-    logger.info("beep-boop i'm online...!LOGER")
-
-
-if __name__ == "__main__":
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)
@@ -40,4 +35,6 @@ if __name__ == "__main__":
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
 
+
+if __name__ == "__main__":
     bot.run(token, bot=True, reconnect=True)

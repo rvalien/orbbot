@@ -18,17 +18,15 @@ class Listener(commands.Cog):
             await self.bot.process_commands(message)
 
     @commands.Cog.listener("on_message")
-    async def kvad(self, message):
-        word = "квад"
-        if word in message.content.casefold():
-            emoji = discord.utils.get(self.bot.emojis, name="quad")
-            await message.add_reaction(emoji)
-
-    @commands.Cog.listener("on_message")
-    async def window(self, message):
-        word = "окно"
-        if word in message.content.casefold():
-            await message.add_reaction('🪟')
+    async def add_reaction(self, message):
+        words = {
+            "квад": discord.utils.get(self.bot.emojis, name="quad"),
+            "алло": "📞",
+            "окно": "🪟",
+        }
+        for key, value in words.items():
+            if key in message.content.casefold():
+                await message.add_reaction(value)
 
 
 def setup(bot):

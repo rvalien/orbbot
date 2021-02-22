@@ -3,8 +3,6 @@ import random
 
 from discord.ext import commands
 
-reactions = ["👍", "👎"]
-
 
 class SimpleCommands(commands.Cog):
     def __init__(self, bot):
@@ -20,7 +18,7 @@ class SimpleCommands(commands.Cog):
             await asyncio.sleep(0.5)
 
         message = await ctx.send(f"Poll: {question} - {ctx.author}")
-        for emoji in reactions:
+        for emoji in ["👍", "👎"]:
             await message.add_reaction(emoji)
 
     @commands.command()

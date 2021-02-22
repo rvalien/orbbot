@@ -18,6 +18,13 @@ class Listener(commands.Cog):
             await self.bot.process_commands(message)
 
     @commands.Cog.listener("on_message")
+    async def wrong(self, message):
+        word = " ой "
+        if word in message.content.casefold():
+            await message.channel.send("НЕ ТА БАЗА!")
+            await self.bot.process_commands(message)
+
+    @commands.Cog.listener("on_message")
     async def add_reaction(self, message):
         words = {
             "квад": discord.utils.get(self.bot.emojis, name="quad"),

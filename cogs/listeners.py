@@ -26,7 +26,7 @@ class Listener(commands.Cog):
         trigger_words = {
             "всем пока": {"message": "bb, cu, <3!!!", "status": discord.Status.idle},
             "всем привет": {"message": f"Привет, {message.author.name}", "status": discord.Status.online},
-            "night call": {
+            "погнали": {
                 "message": "ПОГНАЛИ КОТА!",
                 "status": discord.Status.do_not_disturb,
                 "game": discord.Game("QC"),

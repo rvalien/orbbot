@@ -48,17 +48,13 @@ class Listener(commands.Cog):
             "квад": discord.utils.get(self.bot.emojis, name="quad"),
             "алло": "📞",
             "окно": "🪟",
-            "123": "🛎️",
+            " 123": "🛎️",
             "спать": random.choice(["💤", "😪", "🥱", "🛌", "🛏️"]),
             "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
         }
 
         emoji = next((value for key, value in react_dict.items() if key in message.content.casefold()), None)
         if emoji:
-            if emoji == "🛎️":
-                print("debug\n")
-                print(message.content.casefold())
-                print("debug\n")
             await message.add_reaction(emoji)
             await self.bot.process_commands(message)
 

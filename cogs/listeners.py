@@ -14,7 +14,9 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def word_react(self, message):
-        trigger_words = {"война": "ВОЙНЯЯЯЯЯ!!!", "извините": "ПИРОЖКИ!!!"}
+        trigger_words = {"война": "ВОЙНЯЯЯЯЯ!!!",
+                         "извините": "ПИРОЖКИ!!!",
+                         "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!"}
 
         word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
         if word:

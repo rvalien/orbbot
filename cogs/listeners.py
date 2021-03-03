@@ -16,6 +16,7 @@ class Listener(commands.Cog):
     async def word_react(self, message):
         trigger_words = {"война": "ВОЙНЯЯЯЯЯ!!!",
                          "извините": "ПИРОЖКИ!!!",
+                         "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
                          "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!"}
 
         word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
@@ -28,6 +29,7 @@ class Listener(commands.Cog):
         trigger_words = {
             "всем пока": {"message": "bb, cu, <3!!!", "status": discord.Status.idle},
             "всем привет": {"message": f"Привет, {message.author.name}", "status": discord.Status.online},
+            "hi all": {"message": f"Hello, {message.author.name}", "status": discord.Status.online},
             "погнали": {
                 "message": "ПОГНАЛИ КОТА!",
                 "status": discord.Status.do_not_disturb,

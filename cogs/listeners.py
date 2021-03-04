@@ -19,7 +19,7 @@ class Listener(commands.Cog):
                          "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
                          "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!"}
 
-        if not message.autor.bot:
+        if not message.author.bot:
             word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
             if word:
                 await message.channel.send(word)
@@ -38,7 +38,7 @@ class Listener(commands.Cog):
             },
         }
 
-        if not message.autor.bot:
+        if not message.author.bot:
             scenario = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
             if scenario:
                 if scenario.get("message"):
@@ -59,7 +59,7 @@ class Listener(commands.Cog):
             "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
         }
 
-        if not message.autor.bot:
+        if not message.author.bot:
             emoji = next((value for key, value in react_dict.items() if key in message.content.casefold()), None)
             if emoji:
                 await message.add_reaction(emoji)

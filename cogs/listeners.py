@@ -19,10 +19,11 @@ class Listener(commands.Cog):
                          "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
                          "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!"}
 
-        word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
-        if word:
-            await message.channel.send(word)
-            await self.bot.process_commands(message)
+        if not message.autor.bot:
+            word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
+            if word:
+                await message.channel.send(word)
+                await self.bot.process_commands(message)
 
     @commands.Cog.listener("on_message")
     async def status_change(self, message):
@@ -37,14 +38,15 @@ class Listener(commands.Cog):
             },
         }
 
-        scenario = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
-        if scenario:
-            if scenario.get("message"):
-                await message.channel.send(scenario["message"])
-            if scenario.get("status"):
-                print(scenario.get("status"))
-                game = scenario.get("game")
-                await self.bot.change_presence(status=scenario["status"], activity=game)
+        if not message.autor.bot:
+            scenario = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
+            if scenario:
+                if scenario.get("message"):
+                    await message.channel.send(scenario["message"])
+                if scenario.get("status"):
+                    print(scenario.get("status"))
+                    game = scenario.get("game")
+                    await self.bot.change_presence(status=scenario["status"], activity=game)
 
     @commands.Cog.listener("on_message")
     async def add_reaction(self, message):
@@ -57,10 +59,11 @@ class Listener(commands.Cog):
             "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
         }
 
-        emoji = next((value for key, value in react_dict.items() if key in message.content.casefold()), None)
-        if emoji:
-            await message.add_reaction(emoji)
-            await self.bot.process_commands(message)
+        if not message.autor.bot:
+            emoji = next((value for key, value in react_dict.items() if key in message.content.casefold()), None)
+            if emoji:
+                await message.add_reaction(emoji)
+                await self.bot.process_commands(message)
 
 
 def setup(bot):

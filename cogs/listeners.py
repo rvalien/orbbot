@@ -14,10 +14,12 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def word_react(self, message):
-        trigger_words = {"война": "ВОЙНЯЯЯЯЯ!!!",
-                         "извините": "ПИРОЖКИ!!!",
-                         "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
-                         "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!"}
+        trigger_words = {
+            "война": "ВОЙНЯЯЯЯЯ!!!",
+            "извините": "ПИРОЖКИ!!!",
+            "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
+            "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!",
+        }
 
         if not message.author.bot:
             word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
@@ -28,13 +30,26 @@ class Listener(commands.Cog):
     @commands.Cog.listener("on_message")
     async def status_change(self, message):
         trigger_words = {
-            "всем пока": {"message": "bb, cu, <3!!!", "status": discord.Status.idle},
-            "всем привет": {"message": f"Привет, {message.author.name}", "status": discord.Status.online},
-            "hi all": {"message": f"Hello, {message.author.name}", "status": discord.Status.online},
+            "всем пока": {
+                "message": "bb, cu, <3!!!",
+                "status": discord.Status.idle,
+                "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
+            },
+            "всем привет": {
+                "message": f"Привет, {message.author.name}",
+                "status": discord.Status.online,
+                "activity": discord.Activity(type=discord.ActivityType.watching, name="Duck Tales"),
+            },
+            "hi all": {
+                "message": f"Hello, {message.author.name}",
+                "status": discord.Status.online,
+                "activity": discord.Streaming(name="How to insert and remove contact lenses",
+                                              url="https://www.youtube.com/watch?v=zwVizcDAlX0"),
+            },
             "погнали": {
                 "message": "ПОГНАЛИ КОТА!",
                 "status": discord.Status.do_not_disturb,
-                "game": discord.Game("QC"),
+                "activity": discord.Game("QC"),
             },
         }
 
@@ -44,9 +59,7 @@ class Listener(commands.Cog):
                 if scenario.get("message"):
                     await message.channel.send(scenario["message"])
                 if scenario.get("status"):
-                    print(scenario.get("status"))
-                    game = scenario.get("game")
-                    await self.bot.change_presence(status=scenario["status"], activity=game)
+                    await self.bot.change_presence(status=scenario.get("status"), activity=scenario.get("activity"))
 
     @commands.Cog.listener("on_message")
     async def add_reaction(self, message):

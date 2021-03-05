@@ -31,7 +31,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def random(self, ctx, *, players: str):
         """
-        split players by space to 2 teams
+        split input players by space to 2 teams
         $random player1 player2 player3 player4
         team 🍏: player1, player3
         team 🍎: player2, player4
@@ -46,7 +46,7 @@ class SimpleCommands(commands.Cog):
             f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}"
         )
 
-    @commands.command()
+    @commands.command(aliases=["dice", "die"])
     async def roll(self, ctx):
         """
         roll dice and set as reaction on your command

@@ -9,7 +9,9 @@ import discord
 import os
 import logging
 
-INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands", "cogs.games"]
+INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands",
+                      # "cogs.games"
+                      ]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
 

@@ -1,5 +1,9 @@
+"""
+this bot made with love
+"""
+
 __author__ = "Valien"
-__version__ = "0.0.10"
+__version__ = "0.0.11"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
@@ -9,9 +13,16 @@ import discord
 import os
 import logging
 
-INITIAL_EXTENSIONS = ["cogs.qc", "cogs.listeners", "cogs.commands",
-                      # "cogs.games"
-                      ]
+from discord.ext import commands
+from tasks.tasks import change_status
+
+
+INITIAL_EXTENSIONS = [
+    "cogs.qc",
+    "cogs.listeners",
+    "cogs.commands",
+    # "cogs.games"
+]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
 
@@ -27,15 +38,20 @@ async def on_ready():
     """http://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
     await bot.change_presence(status=discord.Status.idle)
     print(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
-    game = discord.Game("Жмурки")
-    await bot.change_presence(status=discord.Status.online, activity=game)
+    await bot.change_presence(status=discord.Status.online)
     print("beep-boop i'm online...!")
+
+    print("load loop tasks")
+    change_status.start(bot)
+
+    print("load extension")
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)
             logger.info(f"load: {extension}\n")
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
+    print("let's play")
 
 
 if __name__ == "__main__":

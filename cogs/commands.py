@@ -29,6 +29,11 @@ class SimpleCommands(commands.Cog):
         await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms")
 
     @commands.command()
+    async def debug(self, ctx):
+        await ctx.send(dir(ctx))
+        await ctx.send(ctx.channel.id)
+
+    @commands.command()
     async def random(self, ctx, *, players: str):
         """
         split input players by space to 2 teams

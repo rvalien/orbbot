@@ -56,8 +56,11 @@ async def on_ready():
 
 @bot.event
 async def on_command_error(ctx, error):
-    await ctx.message.add_reaction(discord.utils.get(bot.emojis, name="wat"))
-    logger.info(ctx.message.author, error)
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.message.add_reaction(discord.utils.get(bot.emojis, name="wat"))
+    else:
+        logger.error(ctx.message.author, error)
+        print(ctx.message.author, error)
 
 
 if __name__ == "__main__":

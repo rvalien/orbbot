@@ -1,5 +1,7 @@
 import asyncio
 import random
+import discord
+
 
 from discord.ext import commands
 
@@ -60,6 +62,21 @@ class SimpleCommands(commands.Cog):
         dice = ("1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣")
         die = random.choice(dice)
         await ctx.message.add_reaction(die)
+
+    @commands.command()
+    async def migrate(self, ctx):
+        """
+        move all voice members to another channel
+        """
+        voice_channel = ctx.message.author.voice.channel
+        all_members = voice_channel.members
+        voice_channel_list = ctx.guild.voice_channels
+
+        for channel in voice_channel_list:
+            if not channel.members:
+                for member in all_members:
+                    await member.move_to(channel)
+
 
 
 def setup(bot):

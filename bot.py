@@ -7,15 +7,12 @@ __version__ = "0.0.11"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
-from discord.ext import commands
-
 import discord
 import os
 import logging
 
 from discord.ext import commands
 from tasks.tasks import change_status
-
 
 INITIAL_EXTENSIONS = [
     "cogs.qc",
@@ -26,11 +23,14 @@ INITIAL_EXTENSIONS = [
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]
 
+intents = discord.Intents.default()
+intents.members = True
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
 logger.info("run")
-bot = commands.Bot(command_prefix=prefix, description="Small bot for lil QC community")
+
+bot = commands.Bot(command_prefix=prefix, intents=intents, description="Small bot for lil QC community")
 
 
 @bot.event

@@ -54,5 +54,11 @@ async def on_ready():
     print("let's play")
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    await ctx.message.add_reaction(discord.utils.get(bot.emojis, name="wat"))
+    logger.info(ctx.message.author, error)
+
+
 if __name__ == "__main__":
     bot.run(token, bot=True, reconnect=True)

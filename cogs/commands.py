@@ -76,11 +76,9 @@ class SimpleCommands(commands.Cog):
         move all voice members to another channel
         """
         voice_channel = ctx.message.author.voice.channel
-        print(voice_channel.id)
         all_members = voice_channel.members
         voice_channel_list = ctx.guild.voice_channels
         empty_channel = next(filter(lambda x: not x.members, voice_channel_list))
-        print(empty_channel.id)
         for member in all_members:
             await member.move_to(empty_channel)
             await member.move_to(voice_channel)

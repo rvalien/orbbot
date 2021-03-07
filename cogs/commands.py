@@ -33,8 +33,15 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def debug(self, ctx):
-        await ctx.send(dir(ctx))
-        await ctx.send(ctx.channel.id)
+        voice_channel = ctx.message.author.voice.channel
+        all_members = voice_channel.members
+        voice_channel_list = ctx.guild.voice_channels
+        print(voice_channel_list)
+        print(voice_channel)
+        print(dir(voice_channel))
+
+        # await ctx.send(dir(ctx))
+        # await ctx.send(ctx.channel.id)
 
     @commands.command()
     async def random(self, ctx, *, players: str):
@@ -69,14 +76,14 @@ class SimpleCommands(commands.Cog):
         move all voice members to another channel
         """
         voice_channel = ctx.message.author.voice.channel
+        print(voice_channel.id)
         all_members = voice_channel.members
         voice_channel_list = ctx.guild.voice_channels
-
-        for channel in voice_channel_list:
-            if not channel.members:
-                for member in all_members:
-                    await member.move_to(channel)
-
+        empty_channel = next(filter(lambda x: not x.members, voice_channel_list))
+        print(empty_channel.id)
+        for member in all_members:
+            await member.move_to(empty_channel)
+            await member.move_to(voice_channel)
 
 
 def setup(bot):

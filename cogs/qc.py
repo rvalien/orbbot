@@ -47,10 +47,11 @@ class Commands(commands.Cog):
     @commands.command()
     async def team(self, ctx, *, players=None, time: int = VOTE_TIME):
         """
-        👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
-        You can type any word or number as a message after `$team` command.
-        If message passed: Bot sends a message and shuffles members who react with emoji on it.
-        If message not passed: Bot shuffles members from voice channel.
+        Shuffles members into 2 teams and spectators. See more with `$help team`
+        3 types of use:
+          * type `team` Bot sends a message and shuffles members who react with emoji on it.
+          * type `team and any letter or number or word shorter than 3 chars`. Bot calculate members from voice channel
+          * type `team player1 player2` bot calculate members from voice channel and player names from message
         """
         voice_channel = ctx.message.author.voice.channel
         if not players:
@@ -76,10 +77,11 @@ class Commands(commands.Cog):
             all_members = list(map(lambda x: x.name, reactors))
             await ctx.send("let's shuffle all persons who **react** my message")
         else:
-            await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
             all_members = get_members_voice(ctx)
-            players_list = players.split(" ")
-            all_members += players_list
+            if len(players) >= 3:
+                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
+                players_list = players.split(" ")
+                all_members += players_list
 
         if all_members:
             players, spectators = get_random_spectators_and_players(all_members)
@@ -92,7 +94,7 @@ class Commands(commands.Cog):
             if team2:
                 await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n')
             if spectators:
-                await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}\n")
+                await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}\n")
         else:
             await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n")
 

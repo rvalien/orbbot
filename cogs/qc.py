@@ -45,7 +45,7 @@ class Commands(commands.Cog):
         await ctx.send(f"{icon}\n{text}")
 
     @commands.command()
-    async def team(self, ctx, *, anything=None, time: int = VOTE_TIME):
+    async def team(self, ctx, *, players=None, time: int = VOTE_TIME):
         """
         👨‍👩‍👧‍👦 vs 👨‍👨‍👧‍👧 Shuffles members into 2 teams. See more with `$help team`
         You can type any word or number as a message after `$team` command.
@@ -53,8 +53,7 @@ class Commands(commands.Cog):
         If message not passed: Bot shuffles members from voice channel.
         """
         voice_channel = ctx.message.author.voice.channel
-
-        if not anything:
+        if not players:
             async with ctx.typing():
                 await asyncio.sleep(0.5)
             msg = await ctx.channel.send(
@@ -79,6 +78,8 @@ class Commands(commands.Cog):
         else:
             await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
             all_members = get_members_voice(ctx)
+            players_list = players.split(" ")
+            all_members += players_list
 
         if all_members:
             players, spectators = get_random_spectators_and_players(all_members)

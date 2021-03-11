@@ -78,7 +78,7 @@ class Commands(commands.Cog):
             await ctx.send("let's shuffle all persons who **react** my message")
         else:
             all_members = get_members_voice(ctx)
-            if len(players) >= 3:
+            if len(players) > 3:
                 await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
                 players_list = players.split(" ")
                 all_members += players_list

@@ -51,6 +51,12 @@ class Listener(commands.Cog):
                 "status": discord.Status.do_not_disturb,
                 "activity": discord.Game("QC"),
             },
+            " меня ": {
+                "message": "ты меня снимаешь? 🦇",
+                "status": discord.Status.online,
+                "activity": discord.Game("QC"),
+            },
+
         }
 
         if not message.author.bot:

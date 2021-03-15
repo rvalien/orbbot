@@ -42,7 +42,7 @@ async def on_ready():
     print("beep-boop i'm online...!")
 
     print("load loop tasks")
-    change_status.start(bot)
+    # change_status.start(bot)
 
     print("load extension")
     for extension in INITIAL_EXTENSIONS:

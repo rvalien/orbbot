@@ -17,9 +17,10 @@ class Listener(commands.Cog):
         trigger_words = {
             "война": "ВОЙНЯЯЯЯЯ!!!",
             "извините": "ПИРОЖКИ!!!",
-            "сколько": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
+            "сколько в": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
             "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!",
-        }
+            "ты меня ":  "ты меня снимаешь? 🦇",
+            }
 
         if not message.author.bot:
             word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
@@ -51,12 +52,6 @@ class Listener(commands.Cog):
                 "status": discord.Status.do_not_disturb,
                 "activity": discord.Game("QC"),
             },
-            " меня ": {
-                "message": "ты меня снимаешь? 🦇",
-                "status": discord.Status.online,
-                "activity": discord.Game("QC"),
-            },
-
         }
 
         if not message.author.bot:

@@ -26,12 +26,11 @@ class Commands(commands.Cog):
     @commands.command()
     async def profile(self, ctx, *, member=None):
         """
-        😸 Show quake profile link `$profile some_name`
+        😸 Show quake profile link `$profile some_name` or it will use your discord nick
         """
-        if member:
-            await ctx.send(f"https://stats.quake.com/profile/{member}")
-        else:
-            await ctx.send("nickname not set. Try: `$profile clawz`")
+        p = member if member else ctx.author.nick
+        await ctx.send(f"https://quake-stats.bethesda.net/profile/{p}")
+        await ctx.send(f"https://dev.quake-champions.com/profile/{p}")
 
     @commands.command()
     async def map(self, ctx):

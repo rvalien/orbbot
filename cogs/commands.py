@@ -30,32 +30,6 @@ class SimpleCommands(commands.Cog):
         """
         await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms")
 
-    @commands.command(aliases=["привет", "эй"])
-    async def talk(self, ctx, *, question):
-
-        url = "https://api.aicloud.sbercloud.ru/public/v1/public_inference/gpt3/predict"
-        payload = {"text": question}
-        headers = {'Content-Type': 'application/json'}
-        response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
-        if response.status_code == 200 and "predictions" in response.json().keys():
-            await ctx.send(response.json()["predictions"])
-        else:
-            print(response.text)
-            await ctx.send("noope")
-
-    @commands.command()
-    @commands.is_owner()
-    async def debug(self, ctx):
-        voice_channel = ctx.message.author.voice.channel
-        all_members = voice_channel.members
-        voice_channel_list = ctx.guild.voice_channels
-        print(voice_channel_list)
-        print(voice_channel)
-        print(dir(voice_channel))
-
-        # await ctx.send(dir(ctx))
-        # await ctx.send(ctx.channel.id)
-
     @commands.command()
     async def random(self, ctx, *, players: str):
         """

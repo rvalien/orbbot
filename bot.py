@@ -18,7 +18,8 @@ INITIAL_EXTENSIONS = [
     "cogs.qc",
     "cogs.listeners",
     "cogs.commands",
-    # "cogs.games"
+    "cogs.dev",
+    # "cogs.games",
 ]
 token = os.environ["TOKEN"]
 prefix = os.environ["PREFIX"]

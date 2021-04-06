@@ -37,8 +37,11 @@ class SimpleCommands(commands.Cog):
         payload = {"text": question}
         headers = {'Content-Type': 'application/json'}
         response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
-
-        await ctx.send(response.json()["predictions"])
+        if response.status_code == 200 and "predictions" in response.json().keys():
+            await ctx.send(response.json()["predictions"])
+        else:
+            print(response.text)
+            await ctx.send("noope")
 
     @commands.command()
     @commands.is_owner()

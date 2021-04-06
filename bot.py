@@ -3,7 +3,7 @@ this bot made with love
 """
 
 __author__ = "Valien"
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
@@ -22,6 +22,7 @@ INITIAL_EXTENSIONS = [
     # "cogs.games",
 ]
 token = os.environ["TOKEN"]
+# token = os.environ["TEST_TOKEN"]
 prefix = os.environ["PREFIX"]
 
 intents = discord.Intents.default()
@@ -34,6 +35,7 @@ logger.info("run")
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(prefix), intents=intents, description="Small bot for lil QC community"
 )
+
 
 @bot.event
 async def on_ready():

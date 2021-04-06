@@ -1,6 +1,7 @@
 import asyncio
+import json
 import random
-import discord
+import requests
 
 from discord.ext import commands
 
@@ -28,6 +29,16 @@ class SimpleCommands(commands.Cog):
         used to check if the bot is alive
         """
         await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms")
+
+    @commands.command(aliases=["привет", "эй"])
+    async def talk(self, ctx, *, question):
+
+        url = "https://api.aicloud.sbercloud.ru/public/v1/public_inference/gpt3/predict"
+        payload = {"text": question}
+        headers = {'Content-Type': 'application/json'}
+        response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+
+        await ctx.send(response.json()["predictions"])
 
     @commands.command()
     @commands.is_owner()

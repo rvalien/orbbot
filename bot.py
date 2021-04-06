@@ -30,8 +30,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.info("run")
 
-bot = commands.Bot(command_prefix=prefix, intents=intents, description="Small bot for lil QC community")
-
+bot = commands.Bot(
+    command_prefix=commands.when_mentioned_or(prefix), intents=intents, description="Small bot for lil QC community"
+)
 
 @bot.event
 async def on_ready():
@@ -42,7 +43,7 @@ async def on_ready():
     print("beep-boop i'm online...!")
 
     print("load loop tasks")
-    # change_status.start(bot)
+    change_status.start(bot)
 
     print("load extension")
     for extension in INITIAL_EXTENSIONS:

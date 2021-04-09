@@ -3,7 +3,7 @@ this bot made with love
 """
 
 __author__ = "Valien"
-__version__ = "0.0.12"
+__version__ = "0.0.13"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 

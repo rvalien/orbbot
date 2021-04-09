@@ -19,7 +19,7 @@ INITIAL_EXTENSIONS = [
     "cogs.listeners",
     "cogs.commands",
     "cogs.dev",
-    # "cogs.games",
+    "cogs.games",
 ]
 token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]

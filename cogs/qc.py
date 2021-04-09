@@ -13,6 +13,7 @@ from moduls import random_gif, random_map, text_formatter, get_random_spectators
 
 apikey = os.environ["TENSOR_API_KEY"]
 VOTE_REACT = {"yes": "✅", "no": "❌", "time": "🔟", "half_time": "5️⃣", "stop": "🛑"}
+DELAY = 120
 VOTE_TIME = 10
 
 logger = logging.getLogger(__name__)
@@ -29,8 +30,9 @@ class Commands(commands.Cog):
         😸 Show quake profile link `$profile some_name` or it will use your discord nick
         """
         p = member if member else ctx.author.nick
-        await ctx.send(f"https://quake-stats.bethesda.net/profile/{p}")
-        await ctx.send(f"https://dev.quake-champions.com/profile/{p}")
+        await ctx.send(f"https://quake-stats.bethesda.net/profile/{p}", delete_after=DELAY)
+        await ctx.send(f"https://dev.quake-champions.com/profile/{p}", delete_after=DELAY)
+        await ctx.message.delete(delay=DELAY)
 
     @commands.command()
     async def map(self, ctx):
@@ -41,7 +43,8 @@ class Commands(commands.Cog):
             await asyncio.sleep(0.5)
 
         icon, text = random_map()
-        await ctx.send(f"{icon}\n{text}")
+        await ctx.send(f"{icon}\n{text}", delete_after=DELAY)
+        await ctx.message.delete(delay=DELAY)
 
     @commands.command()
     async def team(self, ctx, *, players=None, time: int = VOTE_TIME):
@@ -57,7 +60,8 @@ class Commands(commands.Cog):
             async with ctx.typing():
                 await asyncio.sleep(0.5)
             msg = await ctx.channel.send(
-                f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)"""
+                f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)""",
+                delete_after=DELAY
             )
             for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
                 await msg.add_reaction(emoji)
@@ -74,11 +78,11 @@ class Commands(commands.Cog):
             reactors = list(filter(lambda x: not x.bot, reactors))
             # get only names
             all_members = list(map(lambda x: x.name, reactors))
-            await ctx.send("let's shuffle all persons who **react** my message")
+            await ctx.send("let's shuffle all persons who **react** my message", delete_after=DELAY)
         else:
             all_members = get_members_voice(ctx)
             if len(players) > 3:
-                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel")
+                await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", delete_after=DELAY)
                 players_list = players.split(" ")
                 all_members += players_list
 
@@ -89,13 +93,14 @@ class Commands(commands.Cog):
             team2 = list(players[separator:])
 
             if team1:
-                await ctx.send(f'\n**team** 🌻: {", ".join(team1)}\n')
+                await ctx.send(f'\n**team** 🌻: {", ".join(team1)}\n', delete_after=DELAY)
             if team2:
-                await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n')
+                await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n', delete_after=DELAY)
             if spectators:
-                await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}\n")
+                await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}\n", delete_after=DELAY)
         else:
-            await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n")
+            await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n", delete_after=DELAY)
+        await ctx.message.delete(delay=DELAY)
 
     @commands.command()
     async def spec(self, ctx, *, time: int = VOTE_TIME):
@@ -105,7 +110,8 @@ class Commands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)"""
+            f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)""",
+            delete_after=DELAY
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
             await msg.add_reaction(emoji)
@@ -133,7 +139,7 @@ class Commands(commands.Cog):
         spec_mess = (f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(spectators)}",)
         no_spec_mess = (f"Everyone can play!\n{', '.join(players)}",)
         logger.info(f"command spec\n, {reactors=}\n{players=}\n{spectators}\n")
-        await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed)
+        await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed, delete_after=DELAY)
 
     @commands.command()
     async def pzdc(self, ctx, *, time: int = VOTE_TIME):
@@ -143,8 +149,8 @@ class Commands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)'
-        )
+            f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            delete_after=DELAY)
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(time / 2)
@@ -174,13 +180,13 @@ class Commands(commands.Cog):
         random.shuffle(emojis)
         team2 = [list(tup) for tup in zip(team2, emojis[: len(team2)])]
         logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
-        await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n")
-        await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n")
+        await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=DELAY)
+        await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=DELAY)
         if spectators:
-            await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}")
+            await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}", delete_after=DELAY)
 
         icon, text = random_map()
-        await ctx.send(f"{icon}\n{text}")
+        await ctx.send(f"{icon}\n{text}", delete_after=DELAY)
 
 
 def setup(bot):

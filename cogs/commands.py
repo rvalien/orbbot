@@ -1,9 +1,9 @@
 import asyncio
-import json
 import random
-import requests
 
 from discord.ext import commands
+
+DELAY = 120
 
 
 class SimpleCommands(commands.Cog):
@@ -28,7 +28,8 @@ class SimpleCommands(commands.Cog):
         """
         used to check if the bot is alive
         """
-        await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms")
+        await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms",  delete_after=DELAY)
+        await ctx.message.delete(delay=DELAY)
 
     @commands.command()
     async def random(self, ctx, *, players: str):
@@ -45,8 +46,10 @@ class SimpleCommands(commands.Cog):
         random.shuffle(players_list)
         separator = int(len(players_list) / 2)
         await ctx.send(
-            f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}"
+            f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}",
+            delete_after=DELAY
         )
+        await ctx.message.delete(delay=DELAY)
 
     @commands.command(aliases=["dice", "die"])
     async def roll(self, ctx):

@@ -24,16 +24,10 @@ class DevCommands(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def debug(self, ctx):
-        voice_channel = ctx.message.author.voice.channel
-        all_members = voice_channel.members
-        voice_channel_list = ctx.guild.voice_channels
-        print(voice_channel_list)
-        print(voice_channel)
-        print(dir(voice_channel))
-
-        # await ctx.send(dir(ctx))
-        # await ctx.send(ctx.channel.id)
+    async def members(self, ctx):
+        am = self.bot.get_all_members()
+        for m in am:
+            print(m.id, m.name)
 
 
 def setup(bot):

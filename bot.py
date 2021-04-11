@@ -1,18 +1,19 @@
 """
-this bot made with love
+this bot made with ❤️
 """
 
 __author__ = "Valien"
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
 import discord
 import os
 import logging
+import asyncpg
 
 from discord.ext import commands
-from tasks.tasks import change_status
+from tasks.tasks import change_status, bdays_check
 
 INITIAL_EXTENSIONS = [
     "cogs.qc",
@@ -24,6 +25,7 @@ INITIAL_EXTENSIONS = [
 token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]
 prefix = os.environ["PREFIX"]
+database_url = os.environ["DATABASE_URL"]
 
 intents = discord.Intents.default()
 intents.members = True
@@ -33,13 +35,18 @@ logger.setLevel(logging.DEBUG)
 logger.info("run")
 
 bot = commands.Bot(
-    command_prefix=commands.when_mentioned_or(prefix), intents=intents, description="Small bot for lil QC community"
+    command_prefix=commands.when_mentioned_or(prefix),
+    intents=intents,
+    description="Small bot for lil QC community",
 )
 
 
 @bot.event
 async def on_ready():
-    """http://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
+    """https://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
+
+    bot.pg_con = await asyncpg.create_pool(database_url)
+    await bot.pg_con.execute("CREATE TABLE IF NOT EXISTS users(id bigint PRIMARY KEY, data text);")
     await bot.change_presence(status=discord.Status.idle)
     print(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     await bot.change_presence(status=discord.Status.online)
@@ -47,6 +54,7 @@ async def on_ready():
 
     print("load loop tasks")
     change_status.start(bot)
+    bdays_check.start(bot)
 
     print("load extension")
     for extension in INITIAL_EXTENSIONS:

@@ -1,9 +1,19 @@
 import asyncio
 import random
+import os
 
 from discord.ext import commands
 
-DELAY = 120
+delay = os.environ["DELAY"]
+
+
+def correct_day_end(days: int) -> str:
+    string = "дней"
+    if str(days).endswith('1'):
+        string = "день"
+    elif days in (2, 3, 4, 22, 23, 24):
+        string = "дня"
+    return string
 
 
 class SimpleCommands(commands.Cog):
@@ -28,8 +38,8 @@ class SimpleCommands(commands.Cog):
         """
         used to check if the bot is alive
         """
-        await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms",  delete_after=DELAY)
-        await ctx.message.delete(delay=DELAY)
+        await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms", delete_after=delay)
+        await ctx.message.delete(delay=delay)
 
     @commands.command()
     async def random(self, ctx, *, players: str):
@@ -47,9 +57,9 @@ class SimpleCommands(commands.Cog):
         separator = int(len(players_list) / 2)
         await ctx.send(
             f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}",
-            delete_after=DELAY
+            delete_after=delay
         )
-        await ctx.message.delete(delay=DELAY)
+        await ctx.message.delete(delay=delay)
 
     @commands.command(aliases=["dice", "die"])
     async def roll(self, ctx):
@@ -72,6 +82,29 @@ class SimpleCommands(commands.Cog):
         for member in all_members:
             await member.move_to(empty_channel)
             await member.move_to(voice_channel)
+
+    @commands.command()
+    async def bday(self, ctx):
+        query = """
+        select raw.user_name
+        , raw.day::integer
+        , raw.until::integer
+        from (
+        select user_name
+        , extract(day from bday)                                                         as day
+        , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
+        from bdays
+        where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
+        and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
+        order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
+        ) raw;
+        """
+
+        rows = await self.bot.pg_con.fetch(query)
+        for row in rows:
+            await ctx.send(
+                f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
+            )
 
 
 def setup(bot):

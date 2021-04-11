@@ -85,6 +85,9 @@ class SimpleCommands(commands.Cog):
 
     @commands.command()
     async def bday(self, ctx):
+        """
+        show happy birthday users who are coming soon in the current month
+        """
         query = """
         select raw.user_name
         , raw.day::integer

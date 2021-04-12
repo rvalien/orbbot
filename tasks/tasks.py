@@ -9,7 +9,8 @@ from itertools import cycle
 
 apikey = os.environ["TENSOR_API_KEY"]
 delay = os.environ["DELAY"]
-
+print(delay)
+print(type(delay))
 
 @tasks.loop(hours=5.0)
 async def change_status(self):

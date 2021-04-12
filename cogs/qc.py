@@ -13,7 +13,7 @@ from moduls import random_gif, random_map, text_formatter, get_random_spectators
 
 apikey = os.environ["TENSOR_API_KEY"]
 VOTE_REACT = {"yes": "✅", "no": "❌", "time": "🔟", "half_time": "5️⃣", "stop": "🛑"}
-delay = os.environ["DELAY"]
+delay = int(os.environ["DELAY"])
 VOTE_TIME = 10
 
 logger = logging.getLogger(__name__)

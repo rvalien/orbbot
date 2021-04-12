@@ -4,7 +4,7 @@ import os
 
 from discord.ext import commands
 
-delay = os.environ["DELAY"]
+delay = int(os.environ["DELAY"])
 
 
 def correct_day_end(days: int) -> str:

@@ -60,8 +60,8 @@ class Commands(commands.Cog):
             async with ctx.typing():
                 await asyncio.sleep(0.5)
             msg = await ctx.channel.send(
-                f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)""",
-                delete_after=delay
+                f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+                delete_after=delay,
             )
             for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
                 await msg.add_reaction(emoji)
@@ -110,8 +110,8 @@ class Commands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f"""@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)""",
-            delete_after=delay
+            f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            delete_after=delay,
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
             await msg.add_reaction(emoji)
@@ -136,7 +136,7 @@ class Commands(commands.Cog):
         url = random_gif(apikey, random.choice(["team play", "fight", "war"]))
         embed.set_image(url=url)
 
-        spec_mess = (f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(spectators)}",)
+        spec_mess = f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(spectators)}"
         no_spec_mess = (f"Everyone can play!\n{', '.join(players)}",)
         logger.info(f"command spec\n, {reactors=}\n{players=}\n{spectators}\n")
         await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed, delete_after=delay)
@@ -150,7 +150,8 @@ class Commands(commands.Cog):
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
             f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
-            delete_after=delay)
+            delete_after=delay,
+        )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(time / 2)
@@ -183,7 +184,7 @@ class Commands(commands.Cog):
         await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=delay)
         await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=delay)
         if spectators:
-            await ctx.send(f"\nIt 's ☕ time for {', '.join(spectators)}", delete_after=delay)
+            await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
 
         icon, text = random_map()
         await ctx.send(f"{icon}\n{text}", delete_after=delay)

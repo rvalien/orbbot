@@ -37,7 +37,7 @@ async def bdays_check(self):
             # channel = self.get_channel(811505442252521492)  # dev🛠
 
             embed = discord.Embed()
-            url = random_gif(apikey, "dance birth day")
+            url = random_gif(apikey, "birth day")
             embed.set_image(url=url)
 
             async with channel.typing():

@@ -37,6 +37,11 @@ class Listener(commands.Cog):
                 "status": discord.Status.idle,
                 "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
             },
+            "рекомендую": {
+                "message": "можно без рекомендаций?",
+                "status": discord.Status.idle,
+                "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
+            },
             "всем привет": {
                 "message": f"Привет, {message.author.name}",
                 "status": discord.Status.online,

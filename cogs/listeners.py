@@ -86,6 +86,12 @@ class Listener(commands.Cog):
                 await message.add_reaction(emoji)
                 await self.bot.process_commands(message)
 
+    @commands.Cog.listener("on_message")
+    async def goto_bad(self, message):
+        if not message.author.bot:
+            if message.content.casefold() in ("пи", "pi"):
+                await message.reply("здуй спать!", mention_author=True)
+
 
 def setup(bot):
     bot.add_cog(Listener(bot))

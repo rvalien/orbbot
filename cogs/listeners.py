@@ -13,7 +13,7 @@ class Listener(commands.Cog):
         self._last_member = None
 
     @commands.Cog.listener("on_message")
-    async def word_react(self, message):
+    async def word_react(self, ctx):
         trigger_words = {
             "война": "ВОЙНЯЯЯЯЯ!!!",
             "извините": "ПИРОЖКИ!!!",
@@ -23,14 +23,14 @@ class Listener(commands.Cog):
             "всем спасибо, пока": "Всем спасибо, пока.",
             }
 
-        if not message.author.bot:
-            word = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
+        if not ctx.author.bot:
+            word = next((value for key, value in trigger_words.items() if key in ctx.content.casefold()), None)
             if word:
-                await message.channel.send(word)
-                await self.bot.process_commands(message)
+                await ctx.channel.send(word)
+                await self.bot.process_commands(ctx)
 
     @commands.Cog.listener("on_message")
-    async def status_change(self, message):
+    async def status_change(self, ctx):
         trigger_words = {
             "всем пока": {
                 "message": "bb, cu, <3!!!",
@@ -43,12 +43,12 @@ class Listener(commands.Cog):
                 "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
             },
             "всем привет": {
-                "message": f"Привет, {message.author.name}",
+                "message": f"Привет, {ctx.author.name}",
                 "status": discord.Status.online,
                 "activity": discord.Activity(type=discord.ActivityType.watching, name="Duck Tales"),
             },
             "hi all": {
-                "message": f"Hello, {message.author.name}",
+                "message": f"Hello, {ctx.author.name}",
                 "status": discord.Status.online,
                 "activity": discord.Streaming(name="How to insert and remove contact lenses",
                                               url="https://www.youtube.com/watch?v=zwVizcDAlX0"),
@@ -60,16 +60,16 @@ class Listener(commands.Cog):
             },
         }
 
-        if not message.author.bot:
-            scenario = next((value for key, value in trigger_words.items() if key in message.content.casefold()), None)
+        if not ctx.author.bot:
+            scenario = next((value for key, value in trigger_words.items() if key in ctx.content.casefold()), None)
             if scenario:
                 if scenario.get("message"):
-                    await message.channel.send(scenario["message"])
+                    await ctx.channel.send(scenario["message"])
                 if scenario.get("status"):
                     await self.bot.change_presence(status=scenario.get("status"), activity=scenario.get("activity"))
 
     @commands.Cog.listener("on_message")
-    async def add_reaction(self, message):
+    async def add_reaction(self, ctx):
         react_dict = {
             "квад": discord.utils.get(self.bot.emojis, name="quad"),
             "алло": "📞",
@@ -80,17 +80,17 @@ class Listener(commands.Cog):
             "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
         }
 
-        if not message.author.bot:
-            emoji = next((value for key, value in react_dict.items() if key in message.content.casefold()), None)
+        if not ctx.author.bot:
+            emoji = next((value for key, value in react_dict.items() if key in ctx.content.casefold()), None)
             if emoji:
-                await message.add_reaction(emoji)
-                await self.bot.process_commands(message)
+                await ctx.add_reaction(emoji)
+                await self.bot.process_commands(ctx)
 
     @commands.Cog.listener("on_message")
-    async def goto_bad(self, message):
-        if not message.author.bot:
-            if message.content.casefold() in ("пи", "pi"):
-                await message.reply("здуй спать!", mention_author=True)
+    async def goto_bad(self, ctx):
+        if not ctx.author.bot:
+            if ctx.content.casefold() in ("пи", "pi"):
+                await ctx.reply("здуй спать!", mention_author=True)
 
 
 def setup(bot):

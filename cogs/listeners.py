@@ -89,7 +89,7 @@ class Listener(commands.Cog):
     @commands.Cog.listener("on_message")
     async def goto_bed(self, ctx):
         if not ctx.author.bot:
-            if ctx.content.casefold() in ("пи", "pi", "π", "3,14"):
+            if ctx.content.casefold() in ("пи", "pi", "π", "3,14", "3.14"):
                 await ctx.reply("здуй спать!", mention_author=True)
 
 

@@ -9,7 +9,7 @@ delay = int(os.environ["DELAY"])
 
 def correct_day_end(days: int) -> str:
     string = "дней"
-    if str(days).endswith('1'):
+    if str(days).endswith("1") and days != 11:
         string = "день"
     elif days in (2, 3, 4, 22, 23, 24):
         string = "дня"
@@ -57,7 +57,7 @@ class SimpleCommands(commands.Cog):
         separator = int(len(players_list) / 2)
         await ctx.send(
             f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}",
-            delete_after=delay
+            delete_after=delay,
         )
         await ctx.message.delete(delay=delay)
 
@@ -84,30 +84,63 @@ class SimpleCommands(commands.Cog):
             await member.move_to(voice_channel)
 
     @commands.command()
-    async def bday(self, ctx):
+    async def bday(self, ctx, *, name: str = None):
         """
-        show happy birthday users who are coming soon in the current month
-        """
-        query = """
-        select raw.user_name
-        , raw.day::integer
-        , raw.until::integer
-        from (
-        select user_name
-        , extract(day from bday)                                                         as day
-        , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
-        from bdays
-        where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
-        and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
-        order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
-        ) raw;
+        bday - show happy birthday users who are coming soon in the current month
+        ``` До Дня рождения name1 осталось 1 день.
+            До Дня рождения name2 осталось 11 дней.```
+
+        bday all - return list of  all names with b
+        ``` 14.04    name1
+            22.04    name2
+            04.05    name3```
+
+        bday <name> - replay with date if name was found in db
+        ``` 14.04 or 🤷‍♂️```
         """
 
-        rows = await self.bot.pg_con.fetch(query)
-        for row in rows:
-            await ctx.send(
-                f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
-            )
+        async with ctx.typing():
+            await asyncio.sleep(0.5)
+
+        if name and name.casefold() == "all":
+            query = """
+            select to_char(bday, 'DD.MM') as dm, user_name from bdays
+            order by extract(month from bday), extract(day from bday)
+            """
+            rows = await self.bot.pg_con.fetch(query)
+            message = "🎉🥳🥳🥳🥳🥳🥳🎉:\n"
+            for row in rows:
+                message += f'{row["dm"]}\t{row["user_name"]}\n'
+
+            await ctx.send(message)
+
+        elif name:
+            query = f"select to_char(bday, 'DD.MM') as dm from bdays where lower(user_name) = '{name.casefold()}'"
+            value = await self.bot.pg_con.fetchval(query)
+            await ctx.reply(value if value else "🤷‍♂️", mention_author=False)
+
+        else:
+            query = """
+            select raw.user_name
+            , raw.day::integer
+            , raw.until::integer
+            from (
+            select user_name
+            , extract(day from bday)                                                         as day
+            , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
+            from bdays
+            where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
+            and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
+            order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
+            ) raw;
+            """
+
+            rows = await self.bot.pg_con.fetch(query)
+            for row in rows:
+                await ctx.send(
+                    f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
+                )
+        await ctx.message.delete(delay=delay)
 
 
 def setup(bot):

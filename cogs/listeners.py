@@ -42,6 +42,11 @@ class Listener(commands.Cog):
                 "status": discord.Status.idle,
                 "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
             },
+            "сейчас": {
+                "message": "ЩЯС Я ВАС ВСЕХ БЛЯ!...",
+                "status": discord.Status.idle,
+                "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
+            },
             "всем привет": {
                 "message": f"Привет, {ctx.author.name}",
                 "status": discord.Status.online,

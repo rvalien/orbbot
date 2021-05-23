@@ -147,8 +147,11 @@ class SimpleCommands(commands.Cog):
     # @commands.is_owner()
     # @commands.has_permissions(administrator=True)
     async def role(self, ctx, name: str = None):
+        for role in ctx.guild.roles:
+            print(role.id, role.name)
+
         member = ctx.message.author
-        allowed_roles = (845598058389700608, 845956928185565184)
+        allowed_roles = (845598058389700608, 845956928185565184, 845963951987753020)
 
         if name:
             role = get(ctx.guild.roles, name=name)

@@ -151,11 +151,10 @@ class SimpleCommands(commands.Cog):
             print(role.id, role.name)
 
         member = ctx.message.author
-        allowed_roles = (845598058389700608, 845956928185565184, 845963951987753020)
 
         if name:
             role = get(ctx.guild.roles, name=name)
-            if role.id in allowed_roles and role not in member.roles:
+            if role not in member.roles:
                 await ctx.send(f"add role {role.name} to {member.name}")
                 await member.add_roles(role)
 
@@ -166,7 +165,6 @@ class SimpleCommands(commands.Cog):
         else:
             yr = set(member.roles)
             ar = list(set(ctx.guild.roles) - yr)
-            ar = list(filter(lambda x: x.id in allowed_roles, ar))
 
             yr = "\n".join(list(map(lambda x: x.name, member.roles)))
             ar = "\n".join(list(map(lambda x: x.name, ar)))

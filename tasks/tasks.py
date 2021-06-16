@@ -22,7 +22,7 @@ async def change_status(self):
 
 @tasks.loop(hours=5.0)
 async def bdays_check(self):
-    if 9 <= datetime.datetime. utcnow().hour <= 20:
+    if 9 <= datetime.datetime.utcnow().hour <= 20:
         query = """
         select user_id
         from bdays

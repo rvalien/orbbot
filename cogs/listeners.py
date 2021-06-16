@@ -19,9 +19,9 @@ class Listener(commands.Cog):
             "извините": "ПИРОЖКИ!!!",
             "сколько в": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
             "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!",
-            "ты меня ":  "ты меня снимаешь? 🦇",
+            "ты меня ": "ты меня снимаешь? 🦇",
             "всем спасибо, пока": "Всем спасибо, пока.",
-            }
+        }
 
         if not ctx.author.bot:
             word = next((value for key, value in trigger_words.items() if key in ctx.content.casefold()), None)
@@ -94,8 +94,11 @@ class Listener(commands.Cog):
     @commands.Cog.listener("on_message")
     async def goto_bed(self, ctx):
         if not ctx.author.bot:
-            if ctx.content.casefold() in ("пи", "pi", "π", "3,14", "3.14"):
+            if ctx.content.casefold() in ("пи", "pi", "π") or ctx.content.casefold().startswith(
+                    "3,14") or ctx.content.casefold().startswith("3.14"):
+                link = "https://cdn.discordapp.com/attachments/381896931724492800/649586450681036813/slep.mp4"
                 await ctx.reply("здуй спать!", mention_author=True)
+                await ctx.reply(link)
 
 
 def setup(bot):

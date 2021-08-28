@@ -10,11 +10,12 @@ message_id = 881117551344615434
 role_massage_link = "https://discord.com/channels/729318120304672778/881117323321278484/881117551344615434"
 reaction_roles = {
     message_id: [
+        ("huh", 881221879346655294),  # ctf
         ("bonfire", 881130721295622154),  # bonfire
         ("📚", 845598058389700608),  # book
         ("obelisk", 845956928185565184),  # sac
         ("⚔️", 881137457561751583),  # 1vs1
-        ("family_mmbb", 881122111324827679),  # 2vs2
+        ("yeeeessss", 845963951987753020),  # 2vs2
         ("barrel", 881122111324827679),  # divinity
     ]
 }

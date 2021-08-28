@@ -21,6 +21,7 @@ INITIAL_EXTENSIONS = [
     "cogs.commands",
     "cogs.dev",
     "cogs.games",
+    "cogs.roles",
 ]
 token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]
@@ -32,6 +33,9 @@ intents.members = True
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 logger.info("run")
 
 bot = commands.Bot(
@@ -48,22 +52,23 @@ async def on_ready():
     bot.pg_con = await asyncpg.create_pool(database_url)
     await bot.pg_con.execute("CREATE TABLE IF NOT EXISTS users(id bigint PRIMARY KEY, data text);")
     await bot.change_presence(status=discord.Status.idle)
-    print(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
+    logger.info(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     await bot.change_presence(status=discord.Status.online)
-    print("beep-boop i'm online...!")
+    logger.info("beep-boop i'm online...!")
 
-    print("load loop tasks")
+    logger.info("load loop tasks")
     change_status.start(bot)
     bdays_check.start(bot)
 
-    print("load extension")
+    logger.info("load extension")
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)
             logger.info(f"load: {extension}\n")
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
-    print("let's play")
+    logger.info("let's play")
+
 
 
 @bot.event

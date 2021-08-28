@@ -14,7 +14,7 @@ delay = int(os.environ["DELAY"])
 @tasks.loop(hours=5.0)
 async def change_status(self):
     status = cycle(
-        ["HoMM I", "HoMM II", "HoMM III", "HoMM IV", "HoMM V", "HoMM VI", "HoMM VII", "HoMM VIII", "HoMM IX", "HoMM X"]
+        ["Quake Champions", "Control", "Hollow knight", "Alien isolation", "Banner saga", "Divinity: Original sin 2"]
     )
     while not self.is_closed():
         await self.change_presence(activity=discord.Game(next(status)))

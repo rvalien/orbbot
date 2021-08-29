@@ -13,7 +13,7 @@ import logging
 import asyncpg
 
 from discord.ext import commands
-from tasks.tasks import change_status, bdays_check
+from tasks.tasks import change_status, bdays_check, deadline_check
 
 INITIAL_EXTENSIONS = [
     "cogs.qc",
@@ -59,6 +59,7 @@ async def on_ready():
     logger.info("load loop tasks")
     change_status.start(bot)
     bdays_check.start(bot)
+    deadline_check.start(bot)
 
     logger.info("load extension")
     for extension in INITIAL_EXTENSIONS:
@@ -70,14 +71,12 @@ async def on_ready():
     logger.info("let's play")
 
 
-
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.message.add_reaction(discord.utils.get(bot.emojis, name="wat"))
     else:
         logger.error(ctx.message.author, error)
-        print(ctx.message.author, error)
 
 
 if __name__ == "__main__":

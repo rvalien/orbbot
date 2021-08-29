@@ -1,7 +1,8 @@
 from discord import RawReactionActionEvent
 from discord.ext import commands
-from discord.utils import get
+from discord import embeds
 
+import asyncio
 import logging
 
 logger = logging.getLogger(__name__)
@@ -60,31 +61,16 @@ class ReactionRoles(commands.Cog):
         await self.process_reaction(payload, "remove")
 
     @commands.command()
-    # @commands.is_owner()
-    # @commands.has_permissions(administrator=True)
-    async def role(self, ctx, name: str = None):
-        for role in ctx.guild.roles:
-            print(role.id, role.name)
-
+    async def role(self, ctx):
+        """
+        show your roles & link to message where you can add/remove roles
+        """
+        await asyncio.sleep(0.5)
         member = ctx.message.author
-
-        if name:
-            role = get(ctx.guild.roles, name=name)
-            if role not in member.roles:
-                await ctx.send(f"add role {role.name} to {member.name}")
-                await member.add_roles(role)
-
-            elif role in member.roles:
-                await ctx.send(f"remove role {role.name} from {member.name}")
-                await member.remove_roles(role)
-
-        else:
-            yr = set(member.roles)
-            ar = list(set(ctx.guild.roles) - yr)
-
-            yr = "\n".join(list(map(lambda x: x.name, member.roles)))
-            ar = "\n".join(list(map(lambda x: x.name, ar)))
-            await ctx.send(f"Allowed roles:\n`{ar}`\n\nYour roles:\n`{yr}`\nmanage roles here {role_massage_link}")
+        yr = ", ".join(list(map(lambda x: x.name, member.roles)))
+        embed = embeds.Embed()
+        embed.description = f"Your roles:\n`{yr}`\nManage roles [here]({role_massage_link})."
+        await ctx.reply(embed=embed)
 
 
 def setup(bot):

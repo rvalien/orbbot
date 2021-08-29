@@ -44,3 +44,15 @@ async def bdays_check(self):
                 await asyncio.sleep(0.10)
 
             await channel.send(f"{user.mention} happy BD, **{user.name}**! We Love you!", embed=embed)
+
+
+@tasks.loop(hours=12)
+async def deadline_check(self):
+    days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
+    if days and days <= 7:
+        # channel = self.get_channel(774365764190732309)  # づ｡◕‿‿◕｡づ
+        channel = self.get_channel(825411232159760405)  # books
+        # channel = self.get_channel(811505442252521492)  # dev🛠
+        async with channel.typing():
+            await asyncio.sleep(0.10)
+            await channel.send(f"Дней до обсуждения: {days}")

@@ -14,7 +14,7 @@ class DevCommands(commands.Cog):
 
         url = "https://api.aicloud.sbercloud.ru/public/v1/public_inference/gpt3/predict"
         payload = {"text": question}
-        headers = {'Content-Type': 'application/json'}
+        headers = {"Content-Type": "application/json"}
         response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
         if response.status_code == 200 and "predictions" in response.json().keys():
             await ctx.send(f'{response.json()["predictions"][:500]}...')

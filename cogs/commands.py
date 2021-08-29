@@ -2,6 +2,7 @@ import asyncio
 import random
 import os
 
+from datetime import datetime
 from discord.ext import commands
 
 delay = int(os.environ["DELAY"])
@@ -141,6 +142,58 @@ class SimpleCommands(commands.Cog):
                     f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
                 )
         await ctx.message.delete(delay=delay)
+
+    @commands.command()
+    async def deadline(self, ctx, date=None):
+        """
+        show deadline or set
+        to set deadline use command `!deadline 2021-12-31`
+        """
+        async with ctx.typing():
+            await asyncio.sleep(0.5)
+            if date:
+                try:
+                    deadline = datetime.strptime(date, '%Y-%m-%d').date()
+                except ValueError as e:
+                    raise await ctx.reply(f'fuck off: {e}\n', mention_author=False)
+
+                if datetime.utcnow().date() <= deadline:
+                    await self.bot.pg_con.execute("truncate table book_club_deadline")
+                    await self.bot.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
+                    await ctx.reply("deadline set")
+                else:
+                    await ctx.reply(f"deadline: can't bee less that now", mention_author=False)
+
+            else:
+                query = "select deadline from book_club_deadline"
+                value = await self.bot.pg_con.fetchval(query)
+                await ctx.reply(f'deadline {value if value else "is not set"}\n', mention_author=False)
+
+
+        #
+        # else:
+        #     query = """
+        #     select raw.user_name
+        #     , raw.day::integer
+        #     , raw.until::integer
+        #     from (
+        #     select user_name
+        #     , extract(day from bday)                                                         as day
+        #     , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
+        #     from bdays
+        #     where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
+        #     and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
+        #     order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
+        #     ) raw;
+        #     """
+        #
+        #     rows = await self.bot.pg_con.fetch(query)
+        #     for row in rows:
+        #         await ctx.send(
+        #             f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
+        #         )
+        await ctx.message.delete(delay=delay)
+
 
 def setup(bot):
     bot.add_cog(SimpleCommands(bot))

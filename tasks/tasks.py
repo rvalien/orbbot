@@ -51,9 +51,9 @@ async def bdays_check(self):
             await channel.send(f"{user.mention} happy BD, **{user.name}**! We Love you!", embed=embed)
 
 
-@tasks.loop(hours=5)
+@tasks.loop(hours=12)
 async def deadline_check(self):
-    if 9 <= datetime.datetime.utcnow().hour <= 20:
+    if 9 <= datetime.datetime.utcnow().hour <= 22:
         days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
         if days and days <= 7:
             channel = self.get_channel(CHANNELS.get("books"))

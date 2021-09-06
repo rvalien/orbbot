@@ -28,7 +28,7 @@ async def change_status(self):
 
 @tasks.loop(hours=5.0)
 async def bdays_check(self):
-    if 9 <= datetime.datetime.utcnow().hour <= 20:
+    if 10 <= datetime.datetime.utcnow().hour <= 20:
         query = """
         select user_id
         from bdays
@@ -53,7 +53,7 @@ async def bdays_check(self):
 
 @tasks.loop(hours=12)
 async def deadline_check(self):
-    if 9 <= datetime.datetime.utcnow().hour <= 22:
+    if 10 <= datetime.datetime.utcnow().hour <= 20:
         days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
         if days and days <= 7:
             channel = self.get_channel(CHANNELS.get("books"))

@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# TODO сделать админ панель для управления настройками
 message_id = 881117551344615434
 role_massage_link = "https://discord.com/channels/729318120304672778/881117323321278484/881117551344615434"
 reaction_roles = {

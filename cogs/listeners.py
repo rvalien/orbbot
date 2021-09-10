@@ -13,6 +13,7 @@ class Listener(commands.Cog):
         self._last_member = None
 
     @commands.Cog.listener("on_message")
+    # TODO: вынести это в панель администратора которую нужно сделать
     async def word_react(self, ctx):
         trigger_words = {
             "война": "ВОЙНЯЯЯЯЯ!!!",
@@ -31,6 +32,8 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def status_change(self, ctx):
+        # TODO: вынести это в панель администратора которую нужно сделать
+
         trigger_words = {
             "всем пока": {
                 "message": "bb, cu, <3!!!",
@@ -75,6 +78,7 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def add_reaction(self, ctx):
+        # TODO: вынести это в панель администратора которую нужно сделать
         react_dict = {
             "квад": discord.utils.get(self.bot.emojis, name="quad"),
             "алло": "📞",

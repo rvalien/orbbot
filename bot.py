@@ -7,10 +7,11 @@ __version__ = "0.0.14"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
-import discord
-import os
-import logging
 import asyncpg
+import discord
+import logging
+import os
+import redis
 
 from discord.ext import commands
 from tasks.tasks import change_status, bdays_check, deadline_check
@@ -27,6 +28,8 @@ token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]
 prefix = os.environ["PREFIX"]
 database_url = os.environ["DATABASE_URL"]
+redis_url = os.environ.get("REDISTOGO_URL", "redis://localhost:6379")
+CLIENT = redis.from_url(redis_url)
 
 intents = discord.Intents.default()
 intents.members = True
@@ -59,8 +62,7 @@ async def on_ready():
     logger.info("load loop tasks")
     change_status.start(bot)
     bdays_check.start(bot)
-    deadline_check.start(bot)
-
+    deadline_check.start(bot, CLIENT)
     logger.info("load extension")
     for extension in INITIAL_EXTENSIONS:
         try:

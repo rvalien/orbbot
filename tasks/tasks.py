@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import discord
+import logging
 import os
 
 from discord.ext import tasks
@@ -51,12 +52,25 @@ async def bdays_check(self):
             await channel.send(f"{user.mention} happy BD, **{user.name}**! We Love you!", embed=embed)
 
 
-@tasks.loop(hours=12)
-async def deadline_check(self):
-    if 10 <= datetime.datetime.utcnow().hour <= 20:
-        days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
-        if days and days <= 7:
-            channel = self.get_channel(CHANNELS.get("books"))
-            async with channel.typing():
-                await asyncio.sleep(0.10)
+@tasks.loop(hours=1)
+async def deadline_check(self, redis_client):
+    # channel = self.get_channel(757694875096449029) тестовый канал на тестовом сервере
+    channel = self.get_channel(CHANNELS.get("books"))
+    keyword = "book_club_notify_timestamp"
+
+    utc_now = datetime.datetime.utcnow()
+    timestamp = redis_client.get(keyword)
+
+    logging.warning(f"deadline_check, {channel} {keyword} {utc_now}")
+
+    if 8 <= utc_now.hour <= 15:
+        logging.warning("10 <= utc_now.hour <= 20 TRUE")
+        if timestamp is None or datetime.datetime.fromtimestamp(int(timestamp)).date() != utc_now.date():
+            days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
+            logging.warning(f"days, {days}")
+            if days and days <= 7:
+                logging.info("if days and days <= 7 TRUE")
+                redis_client.set(keyword, int(utc_now.timestamp()))
                 await channel.send(f"Дней до обсуждения: {days}")
+            logging.warning(f"days: {days}")
+        logging.warning(f"timestamp: {timestamp}\nutc_now.date(): {utc_now.date()}")

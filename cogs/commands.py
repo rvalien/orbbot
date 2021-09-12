@@ -1,9 +1,11 @@
 import asyncio
+import logging
 import random
 import os
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from discord.ext import commands
+from bot import CLIENT
 
 delay = int(os.environ["DELAY"])
 
@@ -43,24 +45,37 @@ class SimpleCommands(commands.Cog):
         await ctx.message.delete(delay=delay)
 
     @commands.command()
-    async def random(self, ctx, *, players: str):
+    async def random(self, ctx, *, players: str = None):
         """
-        split input players by space to 2 teams
-        $random player1 player2 player3 player4
+        split input players by comma to 2 teams
+        $random player1, player2, player3, player4
         team 🍏: player1, player3
         team 🍎: player2, player4
+
+        If your list hasn't been changed for the last 30 minutes,
+        you can reuse it by inputting `!random` command without any arguments.
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
 
-        players_list = players.split(" ")
-        random.shuffle(players_list)
-        separator = int(len(players_list) / 2)
-        await ctx.send(
-            f"**team 🍏**: {', '.join(players_list[:separator])}\n**team 🍎**: {', '.join(players_list[separator:])}",
-            delete_after=delay,
-        )
-        await ctx.message.delete(delay=delay)
+        key = f"{ctx.message.author.nick}_last_random_usage"
+        logging.warning(CLIENT.smembers(key))
+
+        if players is None and len(CLIENT.smembers(key)) == 0:
+            await ctx.send("Nothing to randomize. Insert items separated by commas.", delete_after=delay)
+        else:
+            p_list = players.split(", ") if players else list(map(lambda x: x.decode("utf-8"), CLIENT.smembers(key)))
+            CLIENT.delete(key)
+            CLIENT.sadd(key, *p_list)
+            CLIENT.expire(key, timedelta(minutes=30))
+
+            random.shuffle(p_list)
+            separator = int(len(p_list) / 2)
+            await ctx.send(
+                f"**team 🍏**: {', '.join(p_list[:separator])}\n**team 🍎**: {', '.join(p_list[separator:])}",
+                delete_after=delay,
+            )
+            await ctx.message.delete(delay=delay)
 
     @commands.command(aliases=["dice", "die"])
     async def roll(self, ctx):
@@ -147,51 +162,26 @@ class SimpleCommands(commands.Cog):
     async def deadline(self, ctx, date=None):
         """
         show deadline or set
+        to show deadline use command `!deadline`
         to set deadline use command `!deadline 2021-12-31`
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
             if date:
                 try:
-                    deadline = datetime.strptime(date, '%Y-%m-%d').date()
+                    deadline = datetime.strptime(date, "%Y-%m-%d").date()
                 except ValueError as e:
-                    raise await ctx.reply(f'fuck off: {e}\n', mention_author=False)
-
+                    raise await ctx.reply(f"fuck off: {e}\n", mention_author=False)
                 if datetime.utcnow().date() <= deadline:
                     await self.bot.pg_con.execute("truncate table book_club_deadline")
                     await self.bot.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
                     await ctx.reply("deadline set")
                 else:
-                    await ctx.reply(f"deadline: can't bee less that now", mention_author=False)
-
+                    await ctx.reply("deadline: can't bee less that now", mention_author=False)
             else:
                 query = "select deadline from book_club_deadline"
                 value = await self.bot.pg_con.fetchval(query)
                 await ctx.reply(f'deadline {value if value else "is not set"}\n', mention_author=False)
-
-
-        #
-        # else:
-        #     query = """
-        #     select raw.user_name
-        #     , raw.day::integer
-        #     , raw.until::integer
-        #     from (
-        #     select user_name
-        #     , extract(day from bday)                                                         as day
-        #     , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
-        #     from bdays
-        #     where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
-        #     and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
-        #     order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
-        #     ) raw;
-        #     """
-        #
-        #     rows = await self.bot.pg_con.fetch(query)
-        #     for row in rows:
-        #         await ctx.send(
-        #             f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
-        #         )
         await ctx.message.delete(delay=delay)
 
 

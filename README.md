@@ -25,7 +25,8 @@ than 8, bot choose random spectators.
 `help`    Shows this message and more info for commands.  
 `poll` Simple poll with only 2 reactions (👍, 👎).  
 `roll` Roll die. Return number from 1 to 6.  
-`random` Shuffle to 2 teams from message input.
+`random` Shuffle to 2 teams from message input.  
+`deadline` Show deadline date for book club. To set the date use `!deadline YYYY-MM-DD`  
 
 #### info:
 in `pzdc` & `team anything` command use emoji vote mode.

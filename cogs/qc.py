@@ -9,7 +9,15 @@ import random
 import logging
 
 from discord.ext import commands
-from moduls import random_gif, random_map, text_formatter, get_random_spectators_and_players, get_members_voice, HEROES
+from moduls import (
+    generate_team_image,
+    get_members_voice,
+    get_random_spectators_and_players,
+    HEROES,
+    random_gif,
+    random_map,
+    text_formatter,
+)
 
 apikey = os.environ["TENSOR_API_KEY"]
 VOTE_REACT = {"yes": "✅", "no": "❌", "time": "🔟", "half_time": "5️⃣", "stop": "🛑"}
@@ -171,6 +179,9 @@ class Commands(commands.Cog):
         emojis = list(map(str, emojis))
 
         players, spectators = get_random_spectators_and_players(all_members)
+
+        logger.info(players)
+
         separator = int(len(players) / 2)
         team1 = list(players[:separator])
         team2 = list(players[separator:])
@@ -183,6 +194,67 @@ class Commands(commands.Cog):
         logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
         await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=delay)
         await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=delay)
+        if spectators:
+            await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
+
+        icon, text = random_map()
+        await ctx.send(f"{icon}\n{text}", delete_after=delay)
+
+    @commands.command()
+    async def tezdc(self, ctx, *, time: int = VOTE_TIME):
+        """
+        random map, character and team shuffle
+        """
+        async with ctx.typing():
+            await asyncio.sleep(0.5)
+        msg = await ctx.channel.send(
+            f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            delete_after=delay,
+        )
+        for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
+            await msg.add_reaction(emoji)
+        await asyncio.sleep(time / 2)
+        msg = await ctx.channel.fetch_message(msg.id)
+        await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
+        await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
+        await asyncio.sleep(time / 2)
+        await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
+        await msg.add_reaction(VOTE_REACT.get("stop"))
+        msg = await ctx.channel.fetch_message(msg.id)
+        reactors = await msg.reactions[0].users().flatten()
+        reactors = list(filter(lambda x: not x.bot, reactors))
+        all_members = list(map(lambda x: x.name, reactors))
+
+        emojis = list(map(lambda x: x.get("emoji"), HEROES))
+        emojis = list(map(lambda x: discord.utils.get(self.bot.emojis, name=x), emojis))
+        emojis = list(map(str, emojis))
+
+        players, spectators = get_random_spectators_and_players(all_members)
+        # players = ["player1", "player2", "player3", "player4", "player5", "player6", "player7", "player8"]
+        random.shuffle(players)
+        # spectators = None
+
+        logger.info(players)
+
+        separator = int(len(players) / 2)
+        team1 = list(players[:separator])
+        team2 = list(players[separator:])
+
+        # random.shuffle(emojis)
+        # team1 = [list(tup) for tup in zip(team1, emojis[:separator])]
+        # random.shuffle(emojis)
+        # team2 = [list(tup) for tup in zip(team2, emojis[: len(team2)])]
+        # logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
+        # await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=delay)
+        # await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=delay)
+
+        random.shuffle(emojis)
+        generate_team_image(emojis[:separator])
+        await ctx.send(" ,".join(team1), file="team.png",  delete_after=delay)
+        random.shuffle(emojis)
+        generate_team_image(emojis[: len(team2)])
+        await ctx.send(" ,".join(team2), file="team.png",  delete_after=delay)
+
         if spectators:
             await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
 

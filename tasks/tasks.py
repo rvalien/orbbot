@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 import discord
-import logging
 import os
 
 from discord.ext import tasks
@@ -61,18 +60,11 @@ async def deadline_check(self, redis_client):
     utc_now = datetime.datetime.utcnow()
     timestamp = redis_client.get(keyword)
 
-    logging.warning(f"deadline_check, {channel} {keyword} {utc_now}")
-
     if 8 <= utc_now.hour <= 15:
-        logging.warning("10 <= utc_now.hour <= 20 TRUE")
         if timestamp is None or datetime.datetime.fromtimestamp(int(timestamp)).date() != utc_now.date():
             days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
-            logging.warning(f"days, {days}")
             if days and days < 0:
                 await self.bot.pg_con.execute("truncate table book_club_deadline")
             elif days and days <= 7:
-                logging.info("if days and days <= 7 TRUE")
                 redis_client.set(keyword, int(utc_now.timestamp()))
                 await channel.send(f"Дней до обсуждения: {days}")
-            logging.warning(f"days: {days}")
-        logging.warning(f"timestamp: {timestamp}\nutc_now.date(): {utc_now.date()}")

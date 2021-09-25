@@ -1,28 +1,40 @@
 import json
+import logging
 import random
 import requests
-import logging
+import numpy as np
+from PIL import Image
 
 logger = logging.getLogger(__name__)
 
 HEROES = [
-    {"name": "Anarki", "emoji": "Anarki"},
-    {"name": "Athena", "emoji": "Athena"},
-    {"name": "B.J. Blazkowicz", "emoji": "BJ"},
-    {"name": "Clutch", "emoji": "Clutch"},
-    {"name": "Death Knight", "emoji": "DeathKnight"},
-    {"name": "Doom Slayer", "emoji": "Doom"},
-    {"name": "Eisen", "emoji": "Eisen"},
-    {"name": "Galena", "emoji": "Galena"},
-    {"name": "Keel", "emoji": "Keel"},
-    {"name": "Nyx", "emoji": "Nyx"},
-    {"name": "Ranger", "emoji": "Ranger"},
-    {"name": "ScaleBearer", "emoji": "Scalebearer"},
-    {"name": "Slash", "emoji": "Slash"},
-    {"name": "Sorlag", "emoji": "Sorlag"},
-    {"name": "Strogg", "emoji": "Strogg"},
-    {"name": "Visor", "emoji": "Visor"},
+    {"name": "Anarki", "emoji": "Anarki", "patch": "emojis/Anarki.png"},
+    {"name": "Athena", "emoji": "Athena", "patch": "emojis/Athena.png"},
+    {"name": "B.J. Blazkowicz", "emoji": "BJ", "patch": "emojis/BJ.png"},
+    {"name": "Clutch", "emoji": "Clutch", "patch": "emojis/Clutch.png"},
+    {"name": "Death Knight", "emoji": "DeathKnight", "patch": "emojis/DeathKnight.png"},
+    {"name": "Doom Slayer", "emoji": "Doom", "patch": "emojis/Doom.png"},
+    {"name": "Eisen", "emoji": "Eisen", "patch": "emojis/Eisen.png"},
+    {"name": "Galena", "emoji": "Galena", "patch": "emojis/Galena.png"},
+    {"name": "Keel", "emoji": "Keel", "patch": "emojis/Keel.png"},
+    {"name": "Nyx", "emoji": "Nyx", "patch": "emojis/Nyx.png"},
+    {"name": "Ranger", "emoji": "Ranger", "patch": "emojis/Ranger.png"},
+    {"name": "ScaleBearer", "emoji": "ScaleBearer", "patch": "emojis/ScaleBearer.png"},
+    {"name": "Slash", "emoji": "Slash", "patch": "emojis/Slash.png"},
+    {"name": "Sorlag", "emoji": "Sorlag", "patch": "emojis/Sorlag.png"},
+    {"name": "Strogg", "emoji": "Strogg", "patch": "emojis/Strogg.png"},
+    {"name": "Visor", "emoji": "Visor", "patch": "emojis/Visor.png"},
 ]
+
+
+def generate_team_image(list_im):
+    imgs = [Image.open(i) for i in list_im]
+    # pick the image which is the smallest, and resize the others to match it (can be arbitrary image shape here)
+    min_shape = sorted([(np.sum(i.size), i.size) for i in imgs])[0][1]
+    imgs_comb = np.hstack((np.asarray(i.resize(min_shape)) for i in imgs))
+    # save that beautiful picture
+    imgs_comb = Image.fromarray(imgs_comb)
+    imgs_comb.save('team.png')
 
 
 def random_gif(apikey, search_term, lmt=8):
@@ -102,12 +114,6 @@ def get_random_spectators_and_players(all_players: list) -> tuple:
     logger.info("input:", len(all_players))
 
     separator = 8
-
-    # if len(all_players) > 8:
-    #     separator = 8
-    # else:
-    #     separator = len(all_players) // 2 * 2
-
     players = all_players[:separator]
     spectators = all_players[separator:]
     return players, spectators

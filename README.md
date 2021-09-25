@@ -59,6 +59,7 @@ to run this bot, you need to set environment variables:
 ### deploy
 
 [configure your bot here](https://discord.com/developers/applications/)  
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/rvalien/orbbot)
 
-Wanna new features? [Create an issue](https://github.com/rvalien/orbbot/issues) on this repo.
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/rvalien/orbbot)  
+[invite link](https://discordapp.com/oauth2/authorize?&client_id=757854688518602773&scope=bot&permissions=1275591744)  
+Wanna new features? [Create an issue](https://github.com/rvalien/orbbot/issues) on this repo.  

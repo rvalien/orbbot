@@ -8,6 +8,7 @@ __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
 import asyncpg
+import datetime
 import discord
 import logging
 import os
@@ -39,7 +40,6 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
-logger.info("run")
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(prefix),
@@ -52,25 +52,28 @@ bot = commands.Bot(
 async def on_ready():
     """https://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""
 
+    bot.github = "https://github.com/rvalien/orbbot"
+    bot.launch_time = datetime.datetime.utcnow()
     bot.pg_con = await asyncpg.create_pool(database_url)
     await bot.pg_con.execute("CREATE TABLE IF NOT EXISTS users(id bigint PRIMARY KEY, data text);")
     await bot.change_presence(status=discord.Status.idle)
     logger.info(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     await bot.change_presence(status=discord.Status.online)
-    logger.info("beep-boop i'm online...!")
-
+    logger.info(f"beep-boop i'm online...{bot.launch_time}!")
     logger.info("load loop tasks")
     change_status.start(bot)
     bdays_check.start(bot)
     deadline_check.start(bot, CLIENT)
     logger.info("load extension")
+    user = bot.get_user(admin)
+    await user.send(f"i'm online since {bot.launch_time}")
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)
             logger.info(f"load: {extension}\n")
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
-    logger.info("let's play")
+    logger.info("extension loaded")
 
 
 @bot.event

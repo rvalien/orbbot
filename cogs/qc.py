@@ -225,35 +225,20 @@ class Commands(commands.Cog):
         reactors = list(filter(lambda x: not x.bot, reactors))
         all_members = list(map(lambda x: x.name, reactors))
 
-        emojis = list(map(lambda x: x.get("emoji"), HEROES))
-        emojis = list(map(lambda x: discord.utils.get(self.bot.emojis, name=x), emojis))
-        emojis = list(map(str, emojis))
-
+        emojis = list(map(lambda x: x.get("patch"), HEROES))
         players, spectators = get_random_spectators_and_players(all_members)
-        # players = ["player1", "player2", "player3", "player4", "player5", "player6", "player7", "player8"]
         random.shuffle(players)
-        # spectators = None
-
         logger.info(players)
-
         separator = int(len(players) / 2)
         team1 = list(players[:separator])
         team2 = list(players[separator:])
 
-        # random.shuffle(emojis)
-        # team1 = [list(tup) for tup in zip(team1, emojis[:separator])]
-        # random.shuffle(emojis)
-        # team2 = [list(tup) for tup in zip(team2, emojis[: len(team2)])]
-        # logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
-        # await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=delay)
-        # await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=delay)
-
         random.shuffle(emojis)
         generate_team_image(emojis[:separator])
-        await ctx.send(" ,".join(team1), file="team.png",  delete_after=delay)
+        await ctx.send(" ,\t\t\t\t".join(team1), file=discord.File("team.png"),  delete_after=delay)
         random.shuffle(emojis)
         generate_team_image(emojis[: len(team2)])
-        await ctx.send(" ,".join(team2), file="team.png",  delete_after=delay)
+        await ctx.send(" ,\t\t\t\t".join(team2), file=discord.File("team.png"),  delete_after=delay)
 
         if spectators:
             await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)

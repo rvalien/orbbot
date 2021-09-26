@@ -234,11 +234,11 @@ class Commands(commands.Cog):
         team2 = list(players[separator:])
 
         random.shuffle(emojis)
-        generate_team_image(emojis[:separator])
-        await ctx.send(" ,\t\t\t\t".join(team1), file=discord.File("team.png"),  delete_after=delay)
+        generate_team_image(emojis[:separator], team1)
+        await ctx.send("team 1", file=discord.File("team.png"),  delete_after=delay)
         random.shuffle(emojis)
-        generate_team_image(emojis[: len(team2)])
-        await ctx.send(" ,\t\t\t\t".join(team2), file=discord.File("team.png"),  delete_after=delay)
+        generate_team_image(emojis[: len(team2)], team2)
+        await ctx.send("team 2", file=discord.File("team.png"),  delete_after=delay)
 
         if spectators:
             await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)

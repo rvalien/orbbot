@@ -26,7 +26,7 @@ INITIAL_EXTENSIONS = [
     "cogs.roles",
 ]
 token = os.environ["TOKEN"]
-admin = int(os.environ["ADMIN"])
+admin = os.environ["ADMIN"]
 # token = os.environ["TEST_TOKEN"]
 prefix = os.environ["PREFIX"]
 database_url = os.environ["DATABASE_URL"]
@@ -66,8 +66,9 @@ async def on_ready():
     bdays_check.start(bot)
     deadline_check.start(bot, CLIENT)
     logger.info("load extension")
-    user = bot.get_user(admin)
-    await user.send(f"i'm online since {bot.launch_time}")
+    if admin:
+        user = bot.get_user(int(admin))
+        await user.send(f"i'm online since {bot.launch_time}")
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)

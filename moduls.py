@@ -3,7 +3,8 @@ import logging
 import random
 import requests
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,14 +28,21 @@ HEROES = [
 ]
 
 
-def generate_team_image(list_im):
-    imgs = [Image.open(i) for i in list_im]
-    # pick the image which is the smallest, and resize the others to match it (can be arbitrary image shape here)
-    min_shape = sorted([(np.sum(i.size), i.size) for i in imgs])[0][1]
-    imgs_comb = np.hstack((np.asarray(i.resize(min_shape)) for i in imgs))
-    # save that beautiful picture
-    imgs_comb = Image.fromarray(imgs_comb)
-    imgs_comb.save('team.png')
+def generate_team_image(list_im: list, names: list) -> None:
+    # combine images
+    images = [Image.open(i) for i in list_im]
+    images_comb = np.hstack(images)
+    images_comb = Image.fromarray(images_comb)
+
+    # add text
+    font = ImageFont.truetype('qfont.ttf', 16)
+    draw = ImageDraw.Draw(images_comb)
+    margin = 0
+    for text in names:
+        draw.text((margin, 100), text, font=font)
+        margin += 128
+
+    images_comb.save('team.png')
 
 
 def random_gif(apikey, search_term, lmt=8):

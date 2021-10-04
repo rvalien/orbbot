@@ -3,7 +3,7 @@ this bot made with ❤️
 """
 
 __author__ = "Valien"
-__version__ = "0.0.14"
+__version__ = "0.0.15"
 __maintainer__ = "Valien"
 __link__ = "https://github.com/rvalien/orbbot"
 
@@ -48,7 +48,6 @@ bot = commands.Bot(
     intents=intents,
     description="Small bot for lil QC community",
 )
-
 
 @bot.event
 async def on_ready():

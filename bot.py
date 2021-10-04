@@ -70,11 +70,11 @@ async def on_ready():
         user = bot.get_user(int(admin))
         await user.send(f"i'm online since {bot.launch_time}")
 
-    if voice_room:
-        voice_channel = bot.get_channel(int(voice_room))
-        vc = await voice_channel.connect()
-        vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
-        await vc.voice_disconnect()
+    # if voice_room:
+    #     voice_channel = bot.get_channel(int(voice_room))
+    #     vc = await voice_channel.connect()
+    #     vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
+    #     await vc.voice_disconnect()
 
     for extension in INITIAL_EXTENSIONS:
         try:

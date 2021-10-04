@@ -49,6 +49,7 @@ bot = commands.Bot(
     description="Small bot for lil QC community",
 )
 
+
 @bot.event
 async def on_ready():
     """https://discordpy.readthedocs.io/en/latest/api.html#discord.on_ready"""

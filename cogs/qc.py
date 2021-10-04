@@ -181,20 +181,6 @@ class Commands(commands.Cog):
         separator = int(len(players) / 2)
         team1 = list(players[:separator])
         team2 = list(players[separator:])
-
-        # # отправка списка команд используя emoji / убрал чтобы освободить слоты
-        # emojis = list(map(lambda x: x.get("emoji"), HEROES))
-        # emojis = list(map(lambda x: discord.utils.get(self.bot.emojis, name=x), emojis))
-        # emojis = list(map(str, emojis))
-        # random.shuffle(emojis)
-        # team1 = [list(tup) for tup in zip(team1, emojis[:separator])]
-        # random.shuffle(emojis)
-        # team2 = [list(tup) for tup in zip(team2, emojis[: len(team2)])]
-        # logger.info(f"command pzdc:\n{all_members=}\n{players=}\n{spectators=}\n")
-        # await ctx.send(f"\n**team** ❄️:\n{text_formatter(team1)}\n", delete_after=delay)
-        # await ctx.send(f"\n**team** 🌻:\n{text_formatter(team2)}\n", delete_after=delay)
-
-        # отправка списка команд используя изображения
         emojis = list(map(lambda x: x.get("patch"), HEROES))
         random.shuffle(emojis)
         generate_team_image(emojis[:separator], team1)

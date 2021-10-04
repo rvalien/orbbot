@@ -1,6 +1,6 @@
 certifi>=2021.5.30
 requests>=2.26.0
-discord.py>=1.7.3
+discord.py[voice]>=1.7.3
 asyncpg >= 0.24.0
 invoke >= 1.6.0
 redis

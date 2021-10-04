@@ -32,6 +32,7 @@ prefix = os.environ["PREFIX"]
 database_url = os.environ["DATABASE_URL"]
 redis_url = os.environ.get("REDISTOGO_URL", "redis://localhost:6379")
 CLIENT = redis.from_url(redis_url)
+voice_room = os.environ["VOICE_ROOM"]
 
 intents = discord.Intents.default()
 intents.members = True
@@ -70,10 +71,11 @@ async def on_ready():
         user = bot.get_user(int(admin))
         await user.send(f"i'm online since {bot.launch_time}")
 
-    voice_channel = bot.get_channel(757694875096449030)
-    vc = await voice_channel.connect()
-    vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
-    await vc.voice_disconnect()
+    if voice_room:
+        voice_channel = bot.get_channel(int(voice_room))
+        vc = await voice_channel.connect()
+        vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
+        await vc.voice_disconnect()
 
     for extension in INITIAL_EXTENSIONS:
         try:

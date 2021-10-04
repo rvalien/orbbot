@@ -17,6 +17,7 @@ import redis
 from discord.ext import commands
 from tasks.tasks import change_status, bdays_check, deadline_check
 
+
 INITIAL_EXTENSIONS = [
     "cogs.qc",
     "cogs.listeners",

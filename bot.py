@@ -72,12 +72,6 @@ async def on_ready():
         user = bot.get_user(int(admin))
         await user.send(f"i'm online since {bot.launch_time}")
 
-    # if voice_room:
-    #     voice_channel = bot.get_channel(int(voice_room))
-    #     vc = await voice_channel.connect()
-    #     vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
-    #     await vc.voice_disconnect()
-
     for extension in INITIAL_EXTENSIONS:
         try:
             bot.load_extension(extension)
@@ -85,6 +79,13 @@ async def on_ready():
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
     logger.info("extension loaded")
+
+    if voice_room:
+        voice_channel = bot.get_channel(int(voice_room))
+        logger.info(voice_channel)
+        vc = await voice_channel.connect()
+        vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
+        await vc.voice_disconnect()
 
 
 @bot.event

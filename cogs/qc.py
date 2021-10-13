@@ -72,7 +72,7 @@ class QcCommands(commands.Cog):
             all_members = get_members_voice(ctx)
             if players is not None and len(players) > 3:
                 await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", delete_after=delay)
-                players_list = players.split(" ")
+                players_list = players.split(", ")
                 all_members += players_list
 
             if all_members:

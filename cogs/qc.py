@@ -27,7 +27,7 @@ VOTE_TIME = 10
 logger = logging.getLogger(__name__)
 
 
-class Commands(commands.Cog):
+class QcCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_member = None
@@ -54,46 +54,72 @@ class Commands(commands.Cog):
         await ctx.send(f"{icon}\n{text}", delete_after=delay)
         await ctx.message.delete(delay=delay)
 
-    @commands.command()
-    async def team(self, ctx, *, players=None, time: int = VOTE_TIME):
+    @commands.command(aliases=["team"])
+    async def voice(self, ctx, *, players=None):
         """
         Shuffles members into 2 teams and spectators. See more with `$help team`
-        3 types of use:
-          * type `team` Bot sends a message and shuffles members who react with emoji on it.
-          * type `team and any letter or number or word shorter than 3 chars`. Bot calculate members from voice channel
-          * type `team player1 player2` bot calculate members from voice channel and player names from message
+        2 types of use:
+          * type `voice and any letter or number or word shorter than 3 chars`. Bot calculate members from voice channel
+          * type `voice player1 player2` bot calculate members from voice channel and player names from message
         """
-        voice_channel = ctx.message.author.voice.channel
-        if not players:
-            async with ctx.typing():
-                await asyncio.sleep(0.5)
-            msg = await ctx.channel.send(
-                f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
-                delete_after=delay,
-            )
-            for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
-                await msg.add_reaction(emoji)
-            await asyncio.sleep(time / 2)
-            msg = await ctx.channel.fetch_message(msg.id)
-            await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
-            await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
-            await asyncio.sleep(time / 2)
-            await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
-            await msg.add_reaction(VOTE_REACT.get("stop"))
-            # get reactors who react first emoji
-            reactors = await msg.reactions[0].users().flatten()
-            # remove bots
-            reactors = list(filter(lambda x: not x.bot, reactors))
-            # get only names
-            all_members = list(map(lambda x: x.name, reactors))
-            await ctx.send("let's shuffle all persons who **react** my message", delete_after=delay)
-        else:
+        voice_channel = None
+        try:
+            voice_channel = ctx.message.author.voice.channel
+        except AttributeError:
+            await ctx.send(f"You are not in voice channel", delete_after=delay)
+
+        if voice_channel:
             all_members = get_members_voice(ctx)
-            if len(players) > 3:
+            if players is not None and len(players) > 3:
                 await ctx.send(f"let's shuffle all persons from **{voice_channel}** voice channel", delete_after=delay)
                 players_list = players.split(" ")
                 all_members += players_list
 
+            if all_members:
+                players, spectators = get_random_spectators_and_players(all_members)
+                separator = int(len(players) / 2)
+                team1 = list(players[:separator])
+                team2 = list(players[separator:])
+
+                if team1:
+                    await ctx.send(f'\n**team** 🌻: {", ".join(team1)}\n', delete_after=delay)
+                if team2:
+                    await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n', delete_after=delay)
+                if spectators:
+                    await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}\n", delete_after=delay)
+            else:
+                await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n", delete_after=delay)
+        await ctx.message.delete(delay=delay)
+
+    @commands.command()
+    async def vote(self, ctx, *, time: int = VOTE_TIME):
+        """
+        Shuffles members into 2 teams and spectators. See more with `$help vote`
+        3 types of use:
+          * type `vote` Bot sends a message and shuffles members who react with emoji on it.
+        """
+        async with ctx.typing():
+            await asyncio.sleep(0.5)
+        msg = await ctx.channel.send(
+            f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            delete_after=delay,
+        )
+        for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
+            await msg.add_reaction(emoji)
+        await asyncio.sleep(time / 2)
+        msg = await ctx.channel.fetch_message(msg.id)
+        await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
+        await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
+        await asyncio.sleep(time / 2)
+        await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
+        await msg.add_reaction(VOTE_REACT.get("stop"))
+        # get reactors who react first emoji
+        reactors = await msg.reactions[0].users().flatten()
+        # remove bots
+        reactors = list(filter(lambda x: not x.bot, reactors))
+        # get only names
+        all_members = list(map(lambda x: x.name, reactors))
+        await ctx.send("let's shuffle all persons who **react** my message", delete_after=delay)
         if all_members:
             players, spectators = get_random_spectators_and_players(all_members)
             separator = int(len(players) / 2)
@@ -106,8 +132,6 @@ class Commands(commands.Cog):
                 await ctx.send(f'\n**team** ❄️: {", ".join(team2)}\n', delete_after=delay)
             if spectators:
                 await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}\n", delete_after=delay)
-        else:
-            await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n", delete_after=delay)
         await ctx.message.delete(delay=delay)
 
     @commands.command()
@@ -149,7 +173,7 @@ class Commands(commands.Cog):
         logger.info(f"command spec\n, {reactors=}\n{players=}\n{spectators}\n")
         await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed, delete_after=delay)
 
-    @commands.command()
+    @commands.command(aliases=["пиздец"])
     async def pzdc(self, ctx, *, time: int = VOTE_TIME):
         """
         Random map, character and team shuffle.
@@ -177,6 +201,9 @@ class Commands(commands.Cog):
         all_members = list(map(lambda x: x.name, reactors))
 
         players, spectators = get_random_spectators_and_players(all_members)
+
+        # make short names
+        players = list(map(lambda x: f"{x[:10]}..." if len(x) >= 13 else x, players))
         random.shuffle(players)
         separator = int(len(players) / 2)
         team1 = list(players[:separator])
@@ -192,9 +219,6 @@ class Commands(commands.Cog):
         if spectators:
             await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
 
-        icon, text = random_map()
-        await ctx.send(f"{icon}\n{text}", delete_after=delay)
-
 
 def setup(bot):
-    bot.add_cog(Commands(bot))
+    bot.add_cog(QcCommands(bot))

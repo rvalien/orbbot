@@ -27,13 +27,16 @@ INITIAL_EXTENSIONS = [
     "cogs.roles",
 ]
 token = os.environ["TOKEN"]
-admin = os.environ["ADMIN"]
+voice_room = os.environ["VOICE_ROOM"]
+
 # token = os.environ["TEST_TOKEN"]
+# voice_room = os.environ["TEST_VOICE_ROOM"]
+
+admin = os.environ["ADMIN"]
 prefix = os.environ["PREFIX"]
 database_url = os.environ["DATABASE_URL"]
 redis_url = os.environ.get("REDISTOGO_URL", "redis://localhost:6379")
 CLIENT = redis.from_url(redis_url)
-voice_room = os.environ["VOICE_ROOM"]
 
 intents = discord.Intents.default()
 intents.members = True

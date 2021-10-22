@@ -51,6 +51,7 @@ bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(prefix),
     intents=intents,
     description="Small bot for lil QC community",
+    case_insensitive=True,
 )
 
 

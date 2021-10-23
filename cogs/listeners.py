@@ -12,6 +12,13 @@ class Listener(commands.Cog):
         self.bot = bot
         self._last_member = None
 
+        pos = "Humiliation"
+        neg = "rl"
+        self.yes_emoji = discord.utils.get(
+            self.bot.emojis, name=pos) if discord.utils.get(self.bot.emojis, name=pos) else "✔️"
+        self.no_emoji = discord.utils.get(
+            self.bot.emojis, name=neg) if discord.utils.get(self.bot.emojis, name=neg) else "❌"
+
     @commands.Cog.listener("on_message")
     # TODO: вынести это в панель администратора которую нужно сделать
     async def word_react(self, ctx):
@@ -79,6 +86,7 @@ class Listener(commands.Cog):
     @commands.Cog.listener("on_message")
     async def add_reaction(self, ctx):
         # TODO: вынести это в панель администратора которую нужно сделать
+
         react_dict = {
             "квад": discord.utils.get(self.bot.emojis, name="quad"),
             "алло": "📞",
@@ -87,13 +95,16 @@ class Listener(commands.Cog):
             "кажется что": "💩",
             "спать": random.choice(["💤", "😪", "🥱", "🛌", "🛏️"]),
             "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
+            f"<@&{discord.utils.get(ctx.guild.roles, name='SacTime').id}": (self.yes_emoji, self.no_emoji),
         }
 
         if not ctx.author.bot:
-            emoji = next((value for key, value in react_dict.items() if key in ctx.content.casefold()), None)
-            if emoji:
-                await ctx.add_reaction(emoji)
-                await self.bot.process_commands(ctx)
+
+            emojis = next((value for key, value in react_dict.items() if key in ctx.content.casefold()), None)
+            if emojis:
+                for emoji in emojis:
+                    await ctx.add_reaction(emoji)
+                    await self.bot.process_commands(ctx)
 
     @commands.Cog.listener("on_message")
     async def goto_bed(self, ctx):

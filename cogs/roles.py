@@ -20,6 +20,7 @@ reaction_roles = {
         ("yeeeessss", 845963951987753020),  # 2vs2
         ("barrel", 881122111324827679),  # divinity
         ("🤑", 884709223987044383),  # SaleStalker
+        ("🔪", 907192842546454618),  # FridayThe13th
     ]
 }
 

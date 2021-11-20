@@ -101,7 +101,7 @@ class QcCommands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            f'Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
             delete_after=delay,
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
@@ -142,7 +142,7 @@ class QcCommands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f'@here Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            f'Who wanna play now? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
             delete_after=delay,
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
@@ -183,7 +183,7 @@ class QcCommands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f'@here Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            f'Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
             delete_after=delay,
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:

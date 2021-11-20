@@ -28,6 +28,7 @@ class SimpleCommands(commands.Cog):
     async def poll(self, ctx, *, question):
         """
         simple poll with only 2 reactions (👍, 👎)
+        type `poll Аm i good?` and wait.
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)

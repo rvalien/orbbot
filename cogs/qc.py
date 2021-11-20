@@ -45,7 +45,8 @@ class QcCommands(commands.Cog):
     @commands.command()
     async def map(self, ctx):
         """
-        🗺️ Choose random map
+        🗺️ Choose random map.
+        Church of Azathoth", "Tempest Shrine", "Lockbox", "Burial Chamber", "Ruins of Sartnath", "Blood Covenant"
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
@@ -59,8 +60,8 @@ class QcCommands(commands.Cog):
         """
         Shuffles members into 2 teams and spectators. See more with `$help team`
         2 types of use:
-          * type `voice and any letter or number or word shorter than 3 chars`. Bot calculate members from voice channel
-          * type `voice player1 player2` bot calculate members from voice channel and player names from message
+          * type `voice` - Bot calculate members from voice channel
+          * type `voice player1, player2` - bot calculate members from voice channel and player names from message
         """
         voice_channel = None
         try:
@@ -95,8 +96,7 @@ class QcCommands(commands.Cog):
     async def vote(self, ctx, *, time: int = VOTE_TIME):
         """
         Shuffles members into 2 teams and spectators. See more with `$help vote`
-        3 types of use:
-          * type `vote` Bot sends a message and shuffles members who react with emoji on it.
+          Type `vote` Bot sends a message and shuffles members who react with emoji on it.
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
@@ -176,8 +176,8 @@ class QcCommands(commands.Cog):
     @commands.command(aliases=["пиздец"])
     async def pzdc(self, ctx, *, time: int = VOTE_TIME):
         """
-        Random map, character and team shuffle.
-        Bot separate every one who react on this message to two teams.
+        Random character and team shuffle.
+        Bot separate every one, who react on this message to two teams.
         And returns images with characters and names who should play that characters.
         """
         async with ctx.typing():

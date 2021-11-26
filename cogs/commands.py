@@ -154,7 +154,7 @@ class SimpleCommands(commands.Cog):
         to set deadline use command `!deadline 2021-12-31`
         """
         async with ctx.typing():
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.3)
             if date:
                 try:
                     deadline = datetime.strptime(date, "%Y-%m-%d").date()
@@ -163,7 +163,8 @@ class SimpleCommands(commands.Cog):
                 if datetime.utcnow().date() <= deadline:
                     await self.bot.pg_con.execute("truncate table book_club_deadline")
                     await self.bot.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
-                    await ctx.reply("deadline set")
+                    for rune in ("🇩", "🇴", "🇳", "🇪"):
+                        await ctx.message.add_reaction(rune)
                 else:
                     await ctx.reply("deadline: can't bee less that now", mention_author=False)
             else:

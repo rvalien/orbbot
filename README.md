@@ -14,19 +14,25 @@ lil bot for lil discord [QC](https://quake.bethesda.net/en) channel
 ### usage
 
 Orbb can help:  
-`map`     Choose the random map to play.  
+`map`      🗺️ Choose random map.
 `profile` Show quake profile link `profile some_name`  
+`pzdc`     Random character and team shuffle.
 `spec`    Bot send vote message with question like: `Who want to play now?` If player, that set positive reaction, more
 than 8, bot choose random spectators.  
 `voice`    Shuffle members of voice channel to 2 teams and spectators.  
-`vote anything`    Shuffle members who set positive reaction to 2 teams and spectators.  
-`pzdc`    OMG mode! Random team, map and character. Prepare to suffer.  
-`ping` Used to check if the bot is alive.  
+`vote`    Shuffle members who set positive reaction to 2 teams and spectators.  
+`role`    show your roles & link to message where you can add/remove roles  
+`bday`    show happy birthday users
+`pzdc`    OMG mode! Random team and character. Prepare to suffer.  
+`ping`    Used to check if the bot is alive.  
 `help`    Shows this message and more info for commands.  
 `poll` Simple poll with only 2 reactions (👍, 👎).  
-`roll` Roll die. Return number from 1 to 6.  
+`roll` 🎲 roll dice and set result as reaction on your command. Return number from 1 to 6.  
 `random` Shuffle to 2 teams from message input.  
 `deadline` Show deadline date for book club. To set the date use `!deadline YYYY-MM-DD`  
+![](./deadline.JPG)
+
+`slot`     Roll the slot machine 
 
 #### info:
 in `pzdc` & `team anything` command use emoji vote mode.

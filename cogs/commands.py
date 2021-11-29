@@ -48,7 +48,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def random(self, ctx, *, players: str = None):
         """
-        split input players by comma to 2 teams
+        split input players separated by comma to 2 teams
         $random player1, player2, player3, player4
         team 🍏: player1, player3
         team 🍎: player2, player4

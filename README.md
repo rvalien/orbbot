@@ -17,6 +17,7 @@ Orbb can help:
 `map`      🗺️ Choose random map.
 `profile` Show quake profile link `profile some_name`  
 `pzdc`     Random character and team shuffle.
+![](./vote_exmpl.png)
 `spec`    Bot send vote message with question like: `Who want to play now?` If player, that set positive reaction, more
 than 8, bot choose random spectators.  
 `voice`    Shuffle members of voice channel to 2 teams and spectators.  
@@ -31,13 +32,9 @@ than 8, bot choose random spectators.
 `random` Shuffle to 2 teams from message input.  
 `deadline` Show deadline date for book club. To set the date use `!deadline YYYY-MM-DD`  
 ![](./deadline.PNG)  
-`slot`     Roll the slot machine 
+`slot`     Roll the slot machine
 
-#### info:
-in `pzdc` & `team anything` command use emoji vote mode.
-You need to react on bot vote message.  
-example:  
-![](./vote_exmpl.png)
+
 
 
 |emoji| meaning                  |valid reaction|  

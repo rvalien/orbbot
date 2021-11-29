@@ -30,8 +30,7 @@ than 8, bot choose random spectators.
 `roll` 🎲 roll dice and set result as reaction on your command. Return number from 1 to 6.  
 `random` Shuffle to 2 teams from message input.  
 `deadline` Show deadline date for book club. To set the date use `!deadline YYYY-MM-DD`  
-![](./deadline.JPG)
-
+![](./deadline.PNG)  
 `slot`     Roll the slot machine 
 
 #### info:

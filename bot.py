@@ -27,15 +27,12 @@ INITIAL_EXTENSIONS = [
     "cogs.roles",
 ]
 token = os.environ["TOKEN"]
-voice_room = os.environ["VOICE_ROOM"]
-
 # token = os.environ["TEST_TOKEN"]
 # voice_room = os.environ.get("TEST_VOICE_ROOM")
-if voice_room:
-    voice_room = int(voice_room)
 
+voice_room = int(os.getenv('VOICE_ROOM')) if os.getenv('VOICE_ROOM') else None
 admin = os.environ["ADMIN"]
-prefix = os.environ.get("PREFIX", "!")
+prefix = os.getenv("PREFIX", "!")
 database_url = os.environ["DATABASE_URL"]
 redis_url = os.environ.get("REDISTOGO_URL", "redis://localhost:6379")
 CLIENT = redis.from_url(redis_url)
@@ -86,8 +83,8 @@ async def on_ready():
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
     logger.info("extension loaded")
 
-    if voice_room is not None:
-        voice_channel = bot.get_channel(int(voice_room))
+    if voice_room:
+        voice_channel = bot.get_channel(voice_room)
         logger.info(voice_channel)
         vc = await voice_channel.connect()
         vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))

@@ -33,7 +33,7 @@ voice_room = os.environ["VOICE_ROOM"]
 # voice_room = os.environ["TEST_VOICE_ROOM"]
 
 admin = os.environ["ADMIN"]
-prefix = os.environ["PREFIX"]
+prefix = os.environ.get("PREFIX", "!")
 database_url = os.environ["DATABASE_URL"]
 redis_url = os.environ.get("REDISTOGO_URL", "redis://localhost:6379")
 CLIENT = redis.from_url(redis_url)

@@ -84,7 +84,7 @@ async def on_ready():
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
     logger.info("extension loaded")
 
-    if voice_room:
+    if voice_room is not None:
         voice_channel = bot.get_channel(int(voice_room))
         logger.info(voice_channel)
         vc = await voice_channel.connect()

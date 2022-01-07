@@ -64,7 +64,7 @@ async def deadline_check(self, redis_client):
         if timestamp is None or datetime.datetime.fromtimestamp(int(timestamp)).date() != utc_now.date():
             days = await self.pg_con.fetchval("select deadline - current_date from  book_club_deadline")
             if days and days < 0:
-                await self.bot.pg_con.execute("truncate table book_club_deadline")
+                await self.pg_con.execute("truncate table book_club_deadline")
             elif days and days <= 7:
                 redis_client.set(keyword, int(utc_now.timestamp()))
                 await channel.send(f"Дней до обсуждения: {days}")

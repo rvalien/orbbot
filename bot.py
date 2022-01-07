@@ -30,7 +30,9 @@ token = os.environ["TOKEN"]
 voice_room = os.environ["VOICE_ROOM"]
 
 # token = os.environ["TEST_TOKEN"]
-# voice_room = os.environ["TEST_VOICE_ROOM"]
+# voice_room = os.environ.get("TEST_VOICE_ROOM")
+if voice_room:
+    voice_room = int(voice_room)
 
 admin = os.environ["ADMIN"]
 prefix = os.environ.get("PREFIX", "!")

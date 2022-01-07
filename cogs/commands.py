@@ -160,8 +160,8 @@ class SimpleCommands(commands.Cog):
                 except ValueError as e:
                     raise await ctx.reply(f"fuck off: {e}\n", mention_author=False)
                 if datetime.utcnow().date() <= deadline:
-                    await self.bot.pg_con.execute("truncate table book_club_deadline")
-                    await self.bot.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
+                    await self.pg_con.execute("truncate table book_club_deadline")
+                    await self.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
                     for rune in ("🇩", "🇴", "🇳", "🇪"):
                         await ctx.message.add_reaction(rune)
                 else:

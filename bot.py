@@ -28,9 +28,7 @@ INITIAL_EXTENSIONS = [
 ]
 token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]
-# voice_room = os.environ.get("TEST_VOICE_ROOM")
 
-voice_room = int(os.getenv('VOICE_ROOM')) if os.getenv('VOICE_ROOM') else None
 admin = os.environ["ADMIN"]
 prefix = os.getenv("PREFIX", "!")
 database_url = os.environ["DATABASE_URL"]
@@ -82,13 +80,6 @@ async def on_ready():
         except Exception as e:
             logger.warning(f"Failed to load extension {extension}\n{type(e).__name__}: {e}")
     logger.info("extension loaded")
-
-    if voice_room:
-        voice_channel = bot.get_channel(voice_room)
-        logger.info(voice_channel)
-        vc = await voice_channel.connect()
-        vc.play(discord.FFmpegPCMAudio("hello_sound.wav"))
-        await vc.voice_disconnect()
 
 
 @bot.event

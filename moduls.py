@@ -90,14 +90,14 @@ def get_members_voice(context):
 
 def text_formatter(team: list) -> str:
     """
-    transform list of lists into text
+    Transform list of lists into text
     from:
     [['player1', 'Sorlag'], ['player2', 'Nyx'], ['player3', 'Anarki'], ['player4', 'Ranger']]
     to:
-    player1 - Sorlag
-    player2 - Nyx
-    player3 - Anarki
-    player4 - Ranger
+    player1 — Sorlag
+    player2 — Nyx
+    player3 — Anarki
+    player4 — Ranger
 
     :param team: list
     :return: str
@@ -109,19 +109,19 @@ def text_formatter(team: list) -> str:
     return text
 
 
-def get_random_spectators_and_players(all_players: list) -> tuple:
+def get_random_spectators_and_players(all_players: list, separator: int = 8) -> tuple:
     """
-    simple function, that randomize list of players
+    Simple function, that randomize list of players
     split list into players and spectators
     players list less or equal 8 and divisible by two
     :param all_players: list
-    :return: tuple with 2 list
+    :separator int split
+    :return: tuple with 2 lists
     """
 
     random.shuffle(all_players)
     logger.info("input:", len(all_players))
 
-    separator = 8
     players = all_players[:separator]
     spectators = all_players[separator:]
     return players, spectators

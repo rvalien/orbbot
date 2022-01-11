@@ -84,23 +84,23 @@ class Listener(commands.Cog):
                     await self.bot.change_presence(status=scenario.get("status"), activity=scenario.get("activity"))
 
     @commands.Cog.listener("on_message")
-    async def add_reaction(self, ctx):
-        # TODO: вынести это в панель администратора которую нужно сделать
-
+    async def guild_call(self, ctx):
         react_dict = {
-            "квад": discord.utils.get(self.bot.emojis, name="quad"),
-            "алло": "📞",
-            "окно": "🪟",
-            " 123": "🛎️",
-            "кажется что": "💩",
-            "спать": random.choice(["💤", "😪", "🥱", "🛌", "🛏️"]),
-            "пирожки": random.choice(["🥐", "🥨", "🥯", "🥮"]),
             f"<@&{discord.utils.get(ctx.guild.roles, name='SacTime').id}": (self.yes_emoji, self.no_emoji),
         }
-
         if not ctx.author.bot:
-
             emojis = next((value for key, value in react_dict.items() if key in ctx.content.casefold()), None)
+            if emojis:
+                for emoji in emojis:
+                    await ctx.add_reaction(emoji)
+                    await self.bot.process_commands(ctx)
+
+    @commands.Cog.listener("on_message")
+    async def add_reaction(self, ctx):
+        if not ctx.author.bot:
+            emojis = next(
+                (random.choice(value) for key, value in self.bot.reaction.items() if key in ctx.content.casefold()),
+                None)
             if emojis:
                 for emoji in emojis:
                     await ctx.add_reaction(emoji)

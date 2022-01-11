@@ -59,7 +59,18 @@ async def on_ready():
     bot.github = "https://github.com/rvalien/orbbot"
     bot.launch_time = datetime.datetime.utcnow()
     bot.pg_con = await asyncpg.create_pool(database_url)
-    await bot.pg_con.execute("CREATE TABLE IF NOT EXISTS users(id bigint PRIMARY KEY, data text);")
+    # загрузка словаря реакций бота на определённые сообщения.
+    records = await bot.pg_con.fetch("select trigger, reaction_list from add_reaction")
+    bot.reaction = dict(records)
+
+    # подготовка базы данных
+    sql_path = "sql_queries"
+    for file in os.listdir(sql_path):
+        logger.info(f"prepare db with: {file}\n")
+        with open(os.path.join(sql_path, file), encoding="utf-8", mode="r") as raw_file:
+            query = raw_file.read()
+            await bot.pg_con.execute(query)
+
     await bot.change_presence(status=discord.Status.idle)
     logger.info(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     await bot.change_presence(status=discord.Status.online)

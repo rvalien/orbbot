@@ -66,7 +66,7 @@ class ReactionRoles(commands.Cog):
     @commands.command()
     async def role(self, ctx):
         """
-        show your roles & link to message where you can add/remove roles
+        Show your roles & link to message where you can add/remove roles.
         """
         await asyncio.sleep(0.5)
         member = ctx.message.author

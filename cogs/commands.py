@@ -29,7 +29,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def poll(self, ctx, *, question):
         """
-        simple poll with only 2 reactions (👍, 👎)
+        A simple poll with only 2 reactions (👍, 👎)
         type `poll Аm i good?` and wait.
         """
         async with ctx.typing():
@@ -42,7 +42,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def ping(self, ctx):
         """
-        used to check if the bot is alive
+        Used to check if the bot alive
         """
         await ctx.send(f"🏓 pong! {round(self.bot.latency * 1000)} ms", delete_after=delay)
         await ctx.message.delete(delay=delay)
@@ -50,12 +50,12 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def random(self, ctx, *, players: str = None):
         """
-        split input players separated by comma to 2 teams
+        Split input players separated by a comma to 2 teams
         $random player1, player2, player3, player4
         team 🍏: player1, player3
         team 🍎: player2, player4
 
-        If your list hasn't been changed for the last 30 minutes,
+        If your list hasn't changed for the last 30 minutes,
         you can reuse it by inputting `!random` command without any arguments.
         """
         async with ctx.typing():
@@ -126,14 +126,14 @@ class SimpleCommands(commands.Cog):
             await ctx.reply(user.month_and_day if user else "🤷‍♂️", mention_author=False)
 
         else:
-            cur_date = datetime.utcnow()
+            current_date = datetime.utcnow()
             cur_month_users = await User.query.where(
-                func.date_part("month", User.birth_date) == cur_date.month
+                func.date_part("month", User.birth_date) == current_date.month
             ).gino.all()
 
             if cur_month_users:
                 for user in cur_month_users:
-                    days_left = user.birth_date.day - cur_date.day
+                    days_left = user.birth_date.day - current_date.day
                     await ctx.send(
                         f"До Дня Рождения **{user.user_name}** осталось {days_left} {correct_day_end(days_left)}."
                     )
@@ -144,7 +144,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def deadline(self, ctx, date=None):
         """
-        show deadline or set
+        Show deadline or set
         to show deadline use command `!deadline`
         to set deadline use command `!deadline 2021-12-31`
         """

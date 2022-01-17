@@ -1,5 +1,5 @@
 """
-this bot made with ❤️
+This bot made with ❤️
 """
 
 __author__ = "Valien"
@@ -17,7 +17,6 @@ import redis
 from discord.ext import commands
 from models.db_gino import on_startup as gino_on_startup
 from tasks.tasks import change_status, bdays_check, deadline_check
-
 
 INITIAL_EXTENSIONS = [
     "cogs.qc",
@@ -63,6 +62,15 @@ async def on_ready():
     # загрузка словаря реакций бота на определённые сообщения.
     records = await bot.pg_con.fetch("select trigger, reaction_list from add_reaction")
     bot.reaction = dict(records)
+    # TODO перенести статусы в админку
+    bot.statuses = [
+        "Quake Champions",
+        "Control",
+        "Hollow knight",
+        "Alien isolation",
+        "Banner saga",
+        "Divinity: Original sin 2"
+    ]
 
     # подготовка базы данных
     sql_path = "sql_queries"

@@ -1,5 +1,5 @@
 """
-commands for QC game
+Commands for QC game
 """
 
 import asyncio
@@ -35,7 +35,7 @@ class QcCommands(commands.Cog):
     @commands.command()
     async def profile(self, ctx, *, member=None):
         """
-        😸 Show quake profile link `$profile some_name` or it will use your discord nick
+        😸 Show quake profile link `$profile some_name`, or it will use your discord nickname.
         """
         p = member if member else ctx.author.nick
         await ctx.send(f"https://quake-stats.bethesda.net/profile/{p}", delete_after=delay)
@@ -45,7 +45,7 @@ class QcCommands(commands.Cog):
     @commands.command()
     async def map(self, ctx):
         """
-        🗺️ Choose random map.
+        🗺️ Choose a random map.
         Church of Azathoth", "Tempest Shrine", "Lockbox", "Burial Chamber", "Ruins of Sartnath", "Blood Covenant"
         """
         async with ctx.typing():
@@ -60,8 +60,8 @@ class QcCommands(commands.Cog):
         """
         Shuffles members into 2 teams and spectators. See more with `$help team`
         2 types of use:
-          * type `voice` - Bot calculate members from voice channel
-          * type `voice player1, player2` - bot calculate members from voice channel and player names from message
+          * type `voice` — Bot calculate members from voice channel
+          * type `voice player1, player2` — bot calculate members from voice channel and player names from a message.
         """
         voice_channel = None
         try:
@@ -96,7 +96,7 @@ class QcCommands(commands.Cog):
     async def vote(self, ctx, *, time: int = VOTE_TIME):
         """
         Shuffles members into 2 teams and spectators. See more with `$help vote`
-          Type `vote` Bot sends a message and shuffles members who react with emoji on it.
+          Type `vote` Bot sends a message and shuffles members who react with an emoji on it.
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)
@@ -178,7 +178,7 @@ class QcCommands(commands.Cog):
         """
         Random character and team shuffle.
         Bot separate every one, who react on this message to two teams.
-        And returns images with characters and names who should play that characters.
+        Return images with characters and names who should play that characters.
         """
         async with ctx.typing():
             await asyncio.sleep(0.5)

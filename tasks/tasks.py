@@ -1,11 +1,13 @@
 import asyncio
-import datetime
 import discord
 import os
 
+from datetime import datetime
+from sqlalchemy import func
 from discord.ext import tasks
-from moduls import random_gif
 from itertools import cycle
+from models.db_gino import User
+from moduls import random_gif
 
 apikey = os.environ["TENSOR_API_KEY"]
 delay = int(os.environ["DELAY"])
@@ -19,9 +21,7 @@ CHANNELS = {
 
 @tasks.loop(hours=5.0)
 async def change_status(self):
-    status = cycle(
-        ["Quake Champions", "Control", "Hollow knight", "Alien isolation", "Banner saga", "Divinity: Original sin 2"]
-    )
+    status = cycle(self.bot.statuses)
     while not self.is_closed():
         await self.change_presence(activity=discord.Game(next(status)))
 
@@ -29,28 +29,26 @@ async def change_status(self):
 @tasks.loop(hours=5.0)
 async def bdays_check(self):
 
-    # TODO уйти от сырого sql к моделям пользователя
-    if 10 <= datetime.datetime.utcnow().hour <= 20:
-        query = """
-        select user_id
-        from bdays
-        where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
-        and extract(day from bday) = (SELECT date_part('day', (SELECT current_timestamp)))
-        """
+    if 10 <= datetime.utcnow().hour <= 20:
+        current_date = datetime.utcnow()
+        party_duds = await User.query.where(
+            (func.date_part("month", User.birth_date) == current_date.month) &
+            (func.date_part("day", User.birth_date) == current_date.day)
+        ).gino.all()
 
-        party_dude = await self.pg_con.fetchval(query)
-        if party_dude:
-            user = self.get_user(party_dude)
-            channel = self.get_channel(CHANNELS.get("づ｡◕‿‿◕｡づ"))
+        if party_duds:
+            for dude in party_duds:
+                user = self.get_user(dude)
+                channel = self.get_channel(CHANNELS.get("づ｡◕‿‿◕｡づ"))
 
-            embed = discord.Embed()
-            url = random_gif(apikey, "birth day")
-            embed.set_image(url=url)
+                embed = discord.Embed()
+                url = random_gif(apikey, "birth day")
+                embed.set_image(url=url)
 
-            async with channel.typing():
-                await asyncio.sleep(0.10)
+                async with channel.typing():
+                    await asyncio.sleep(0.10)
 
-            await channel.send(f"{user.mention} happy BD, **{user.name}**! We Love you!", embed=embed)
+                await channel.send(f"{user.mention} happy BD, **{user.name}**! We Love you!", embed=embed)
 
 
 @tasks.loop(hours=6)
@@ -61,7 +59,7 @@ async def deadline_check(self, redis_client, keyword: str = "book_club_notify_ti
     но я хотел его применить для научных целей.
     """
     channel = self.get_channel(CHANNELS.get("books"))
-    utc_now = datetime.datetime.utcnow()
+    utc_now = datetime.utcnow()
     timestamp = redis_client.get(keyword)
     # todo можно добавить название книги.
     if 8 <= utc_now.hour <= 15:

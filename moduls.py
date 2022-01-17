@@ -116,7 +116,7 @@ def get_random_spectators_and_players(all_players: list, separator: int = 8) -> 
     players list less or equal 8 and divisible by two
     :param all_players: list
     :separator int split
-    :return: tuple with 2 lists
+    :return: tuple with 2 lists.
     """
 
     random.shuffle(all_players)

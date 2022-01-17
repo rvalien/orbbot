@@ -3,7 +3,7 @@ import logging
 import random
 import os
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from sqlalchemy import func
 from discord.ext import commands
 from models.db_gino import User
@@ -105,15 +105,15 @@ class SimpleCommands(commands.Cog):
         14.04 or 🤷‍♂️
         """
 
-        def _sort_by_month(user_object):
-            return user_object.birth_date.month
+        def day_of_year(user_object):
+            return user_object.birth_date - date(user_object.birth_date.year, 1, 1)
 
         async with ctx.typing():
             await asyncio.sleep(0.5)
 
         if name and name.casefold() == "all":
             users = await User.query.gino.all()
-            users.sort(key=_sort_by_month)
+            users.sort(key=day_of_year)
 
             message = "🎉🥳🥳🥳🥳🥳🥳🎉:\n"
             for user in users:

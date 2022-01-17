@@ -105,11 +105,16 @@ class SimpleCommands(commands.Cog):
         14.04 or 🤷‍♂️
         """
 
+        def _sort_by_month(user_object):
+            return user_object.birth_date.month
+
         async with ctx.typing():
             await asyncio.sleep(0.5)
 
         if name and name.casefold() == "all":
             users = await User.query.gino.all()
+            users.sort(key=_sort_by_month)
+
             message = "🎉🥳🥳🥳🥳🥳🥳🎉:\n"
             for user in users:
                 message += f"{user.user_name}\t{user.month_and_day}\n"
@@ -132,6 +137,8 @@ class SimpleCommands(commands.Cog):
                     await ctx.send(
                         f"До Дня Рождения **{user.user_name}** осталось {days_left} {correct_day_end(days_left)}."
                     )
+            else:
+                await ctx.send("В этом месяце - никого.")
         await ctx.message.delete(delay=delay)
 
     @commands.command()

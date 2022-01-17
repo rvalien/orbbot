@@ -4,7 +4,9 @@ import random
 import os
 
 from datetime import datetime, timedelta
+from sqlalchemy import func
 from discord.ext import commands
+from models.db_gino import User
 from bot import CLIENT
 
 delay = int(os.environ["DELAY"])
@@ -90,60 +92,46 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def bday(self, ctx, *, name: str = None):
         """
-        bday - show happy birthday users who are coming soon in the current month
-        ``` До Дня рождения name1 осталось 1 день.
-            До Дня рождения name2 осталось 11 дней.```
+        `bday` — show users birthday.
+        До Дня рождения name1 осталось 1 день.
+        До Дня рождения name2 осталось 11 дней.
 
-        bday all - return list of  all names with b
-        ``` 14.04    name1
-            22.04    name2
-            04.05    name3```
+        `bday all` — return list of all names with birthdays
+        14.04   name1
+        22.04   name2
+        04.05   name3
 
-        bday <name> - replay with date if name was found in db
-        ``` 14.04 or 🤷‍♂️```
+        `bday <name>` — replay with date if found name in db
+        14.04 or 🤷‍♂️
         """
 
         async with ctx.typing():
             await asyncio.sleep(0.5)
 
         if name and name.casefold() == "all":
-            query = """
-            select to_char(bday, 'DD.MM') as dm, user_name from bdays
-            order by extract(month from bday), extract(day from bday)
-            """
-            rows = await self.bot.pg_con.fetch(query)
+            users = await User.query.gino.all()
             message = "🎉🥳🥳🥳🥳🥳🥳🎉:\n"
-            for row in rows:
-                message += f'{row["dm"]}\t{row["user_name"]}\n'
+            for user in users:
+                message += f"{user.user_name}\t{user.month_and_day}\n"
 
             await ctx.send(message)
 
         elif name:
-            query = f"select to_char(bday, 'DD.MM') as dm from bdays where lower(user_name) = '{name.casefold()}'"
-            value = await self.bot.pg_con.fetchval(query)
-            await ctx.reply(value if value else "🤷‍♂️", mention_author=False)
+            user = await User.query.where(User.user_name.ilike(name)).gino.first()
+            await ctx.reply(user.month_and_day if user else "🤷‍♂️", mention_author=False)
 
         else:
-            query = """
-            select raw.user_name
-            , raw.day::integer
-            , raw.until::integer
-            from (
-            select user_name
-            , extract(day from bday)                                                         as day
-            , extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp))) as until
-            from bdays
-            where extract(month from bday) = (SELECT date_part('month', (SELECT current_timestamp)))
-            and extract(day from bday) > (SELECT date_part('day', (SELECT current_timestamp)))
-            order by extract(day from bday) - (SELECT date_part('day', (SELECT current_timestamp)))
-            ) raw;
-            """
+            cur_date = datetime.utcnow()
+            cur_month_users = await User.query.where(
+                func.date_part("month", User.birth_date) == cur_date.month
+            ).gino.all()
 
-            rows = await self.bot.pg_con.fetch(query)
-            for row in rows:
-                await ctx.send(
-                    f'До Дня рождения **{row["user_name"]}** осталось {row["until"]} {correct_day_end(row["until"])}.'
-                )
+            if cur_month_users:
+                for user in cur_month_users:
+                    days_left = user.birth_date.day - cur_date.day
+                    await ctx.send(
+                        f"До Дня Рождения **{user.user_name}** осталось {days_left} {correct_day_end(days_left)}."
+                    )
         await ctx.message.delete(delay=delay)
 
     @commands.command()

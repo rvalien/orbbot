@@ -15,6 +15,7 @@ import os
 import redis
 
 from discord.ext import commands
+from models.db_gino import on_startup as gino_on_startup
 from tasks.tasks import change_status, bdays_check, deadline_check
 
 
@@ -71,6 +72,7 @@ async def on_ready():
             query = raw_file.read()
             await bot.pg_con.execute(query)
 
+    await gino_on_startup(database_url)
     await bot.change_presence(status=discord.Status.idle)
     logger.info(f"Init {bot.user.name}-{bot.user.id}\nAPI version: {discord.__version__}\nbot version: {__version__}")
     await bot.change_presence(status=discord.Status.online)

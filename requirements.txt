@@ -6,3 +6,4 @@ invoke >= 1.6.0
 redis
 Pillow >=8.3.2
 numpy >= 1.21.2
+gino

@@ -62,15 +62,9 @@ async def on_ready():
     # загрузка словаря реакций бота на определённые сообщения.
     records = await bot.pg_con.fetch("select trigger, reaction_list from add_reaction")
     bot.reaction = dict(records)
-    # TODO перенести статусы в админку
-    bot.statuses = [
-        "Quake Champions",
-        "Control",
-        "Hollow knight",
-        "Alien isolation",
-        "Banner saga",
-        "Divinity: Original sin 2"
-    ]
+    # загрузка активностей для статуса
+    statuses = await bot.pg_con.fetch("select activity from presence")
+    bot.statuses = statuses
 
     # подготовка базы данных
     sql_path = "sql_queries"

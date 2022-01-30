@@ -21,7 +21,7 @@ CHANNELS = {
 
 @tasks.loop(hours=5.0)
 async def change_status(self):
-    status = cycle(self.bot.statuses)
+    status = cycle(self.statuses)
     while not self.is_closed():
         await self.change_presence(activity=discord.Game(next(status)))
 

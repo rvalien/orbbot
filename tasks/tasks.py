@@ -54,7 +54,7 @@ async def bdays_check(self):
 @tasks.loop(hours=6)
 async def deadline_check(self, redis_client, keyword: str = "book_club_notify_timestamp"):
     """
-    уведомляет о скором сроке обсуждения книг.
+    Уведомляет о скором сроке обсуждения книг.
     Использует редис и базу данных. Очевидно можно и без редиса и в базе хранить дату последнего выполнения проверки,
     но я хотел его применить для научных целей.
     """
@@ -63,7 +63,7 @@ async def deadline_check(self, redis_client, keyword: str = "book_club_notify_ti
     timestamp = redis_client.get(keyword)
     # todo можно добавить название книги.
     if 8 <= utc_now.hour <= 15:
-        if timestamp is None or datetime.datetime.fromtimestamp(int(timestamp)).date() != utc_now.date():
+        if timestamp is None or datetime.fromtimestamp(int(timestamp)).date() != utc_now.date():
             days = await self.pg_con.fetchval("select deadline - current_date from book_club_deadline")
             if days and days < 0:
                 await self.pg_con.execute("truncate table book_club_deadline")

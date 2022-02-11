@@ -64,7 +64,7 @@ async def on_ready():
     bot.reaction = dict(records)
     # загрузка активностей для статуса
     statuses = await bot.pg_con.fetch("select activity from presence")
-    bot.statuses = statuses
+    bot.statuses = statuses[0][0]
 
     # подготовка базы данных
     sql_path = "sql_queries"

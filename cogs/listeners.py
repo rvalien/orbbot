@@ -23,9 +23,9 @@ class Listener(commands.Cog):
     # TODO: вынести это в панель администратора которую нужно сделать
     async def word_react(self, ctx):
         trigger_words = {
-            "война": "ВОЙНЯЯЯЯЯ!!!",
+            # "война": "ВОЙНЯЯЯЯЯ!!!",
             "извините": "ПИРОЖКИ!!!",
-            "сколько в": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
+            # "сколько в": "ДА СКОЛЬКО В ТЕБЕ ЖИЗНИ?",
             "огонь": "ОЖОГ ВСЕЙ КИСЬКИ!",
             "ты меня ": "ты меня снимаешь? 🦇",
             "всем спасибо, пока": "Всем спасибо, пока.",
@@ -52,11 +52,11 @@ class Listener(commands.Cog):
                 "status": discord.Status.idle,
                 "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
             },
-            "сейчас": {
-                "message": "ЩЯС Я ВАС ВСЕХ БЛЯ!...",
-                "status": discord.Status.idle,
-                "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
-            },
+            # "сейчас": {
+            #     "message": "ЩЯС Я ВАС ВСЕХ БЛЯ!...",
+            #     "status": discord.Status.idle,
+            #     "activity": discord.Activity(type=discord.ActivityType.listening, name="White noise"),
+            # },
             "всем привет": {
                 "message": f"Привет, {ctx.author.name}",
                 "status": discord.Status.online,

@@ -13,9 +13,9 @@ apikey = os.environ["TENSOR_API_KEY"]
 delay = int(os.environ["DELAY"])
 
 CHANNELS = {
-    "books": 825411232159760405,
-    "づ｡◕‿‿◕｡づ": 774365764190732309,
-    "dev🛠": 811505442252521492,
+    "book": 993816892336783363,
+    "main": 993817340795965450,
+    "dev🛠": 1066726412792381490,
 }
 
 
@@ -58,7 +58,7 @@ async def deadline_check(self, redis_client, keyword: str = "book_club_notify_ti
     Использует редис и базу данных. Очевидно можно и без редиса и в базе хранить дату последнего выполнения проверки,
     но я хотел его применить для научных целей.
     """
-    channel = self.get_channel(CHANNELS.get("books"))
+    channel = self.get_channel(CHANNELS.get("book"))
     utc_now = datetime.utcnow()
     timestamp = redis_client.get(keyword)
     # todo можно добавить название книги.

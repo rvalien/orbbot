@@ -86,7 +86,7 @@ class Listener(commands.Cog):
     @commands.Cog.listener("on_message")
     async def guild_call(self, ctx):
         react_dict = {
-            f"<@&{discord.utils.get(ctx.guild.roles, name='SacTime').id}": (self.yes_emoji, self.no_emoji),
+            f"<@&{discord.utils.get(ctx.guild.roles, name='член КК').id}": (self.yes_emoji, self.no_emoji),
         }
         if not ctx.author.bot:
             emojis = next((value for key, value in react_dict.items() if key in ctx.content.casefold()), None)

@@ -117,7 +117,7 @@ class SimpleCommands(commands.Cog):
 
             message = "🎉🥳🥳🥳🥳🥳🥳🎉:\n"
             for user in users:
-                message += f"{user.user_name}\t{user.month_and_day}\n"
+                message += f"{user.month_and_day}\t{user.user_name}\n"
 
             await ctx.send(message)
 
@@ -134,40 +134,14 @@ class SimpleCommands(commands.Cog):
             if cur_month_users:
                 for user in cur_month_users:
                     days_left = user.birth_date.day - current_date.day
-                    await ctx.send(
-                        f"До Дня Рождения **{user.user_name}** осталось {days_left} {correct_day_end(days_left)}."
-                    )
+                    if days_left > 0:
+                        await ctx.send(
+                            f"До Дня Рождения **{user.user_name}** осталось {days_left} {correct_day_end(days_left)}."
+                        )
             else:
                 await ctx.send("В этом месяце - никого.")
         await ctx.message.delete(delay=delay)
 
-    @commands.command()
-    async def deadline(self, ctx, date=None):
-        """
-        Show deadline or set
-        to show deadline use command `!deadline`
-        to set deadline use command `!deadline 2021-12-31`
-        """
-        async with ctx.typing():
-            if date:
-                try:
-                    deadline = datetime.strptime(date, "%Y-%m-%d").date()
-                except ValueError as e:
-                    raise await ctx.reply(f"fuck off: {e}\n", mention_author=False)
-                if datetime.utcnow().date() <= deadline:
-                    await self.bot.pg_con.execute("truncate table book_club_deadline")
-                    await self.bot.pg_con.execute("insert into book_club_deadline VALUES ('{0}')".format(deadline))
-                    for rune in ("🇩", "🇴", "🇳", "🇪"):
-                        await ctx.message.add_reaction(rune)
-                else:
-                    await ctx.reply("deadline: can't bee less that now", mention_author=False)
-            else:
-                await asyncio.sleep(0.3)
-                query = "select deadline from book_club_deadline"
-                value = await self.bot.pg_con.fetchval(query)
-                await ctx.reply(f'deadline {value if value else "is not set"}\n', mention_author=False)
-        await ctx.message.delete(delay=delay)
 
-
-def setup(bot):
-    bot.add_cog(SimpleCommands(bot))
+async def setup(bot):
+    await bot.add_cog(SimpleCommands(bot))

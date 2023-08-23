@@ -16,7 +16,6 @@ from moduls import (
     HEROES,
     random_gif,
     random_map,
-    text_formatter,
 )
 
 apikey = os.environ["TENSOR_API_KEY"]
@@ -55,8 +54,8 @@ class QcCommands(commands.Cog):
         await ctx.send(f"{icon}\n{text}", delete_after=delay)
         await ctx.message.delete(delay=delay)
 
-    @commands.command(aliases=["team"])
-    async def voice(self, ctx, *, players=None):
+    @commands.command(aliases=["teams"])
+    async def voice_game(self, ctx, *, players=None):
         """
         Shuffles members into 2 teams and spectators. See more with `$help team`
         2 types of use:
@@ -109,19 +108,14 @@ class QcCommands(commands.Cog):
         await asyncio.sleep(time / 2)
         msg = await ctx.channel.fetch_message(msg.id)
         await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
-        await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
+        await msg.add_reaction(VOTE_REACT.get("half_time"))
         await asyncio.sleep(time / 2)
         await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
         await msg.add_reaction(VOTE_REACT.get("stop"))
-        # get reactors who react first emoji
-        reactors = await msg.reactions[0].users().flatten()
-        # remove bots
-        reactors = list(filter(lambda x: not x.bot, reactors))
-        # get only names
-        all_members = list(map(lambda x: x.name, reactors))
+        reactors = [user.name async for user in msg.reactions[0].users() if not user.bot]
         await ctx.send("let's shuffle all persons who **react** my message", delete_after=delay)
-        if all_members:
-            players, spectators = get_random_spectators_and_players(all_members)
+        if reactors:
+            players, spectators = get_random_spectators_and_players(reactors)
             separator = int(len(players) / 2)
             team1 = list(players[:separator])
             team2 = list(players[separator:])
@@ -148,28 +142,21 @@ class QcCommands(commands.Cog):
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
             await msg.add_reaction(emoji)
         await asyncio.sleep(time / 2)
-        msg = await ctx.channel.fetch_message(msg.id)
         await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
-        await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
+        await msg.add_reaction(VOTE_REACT.get("half_time"))
         await asyncio.sleep(time / 2)
         await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
         await msg.add_reaction(VOTE_REACT.get("stop"))
-        msg = await ctx.channel.fetch_message(msg.id)
-        # get reactors who react first emoji
-        reactors = await msg.reactions[0].users().flatten()
-        # remove bots
-        reactors = list(filter(lambda x: not x.bot, reactors))
-        # get only names
-        reactors = list(map(lambda x: x.name, reactors))
+        msg = await ctx.channel.fetch_message(msg.id)  # get message with reactions
+        reactors = [user.name async for user in msg.reactions[0].users() if not user.bot]
         players, spectators = get_random_spectators_and_players(reactors)
         logger.info(f"command spec:\n{reactors=}\n{players=}\n{spectators=}\n")
 
         embed = discord.Embed()
-        url = random_gif(apikey, random.choice(["team play", "fight", "war"]))
-        embed.set_image(url=url)
+        embed.set_image(url=random_gif(apikey, random.choice(["team play", "fight", "war"])))
 
         spec_mess = f"Lucky ones: {', '.join(players)}\nIt's ☕ time for {', '.join(spectators)}"
-        no_spec_mess = (f"Everyone can play!\n{', '.join(players)}",)
+        no_spec_mess = (f"Everyone can play!\n{', '.join(players)}")
         logger.info(f"command spec\n, {reactors=}\n{players=}\n{spectators}\n")
         await ctx.channel.send(spec_mess if spectators else no_spec_mess, embed=embed, delete_after=delay)
 
@@ -191,16 +178,13 @@ class QcCommands(commands.Cog):
         await asyncio.sleep(time / 2)
         msg = await ctx.channel.fetch_message(msg.id)
         await msg.remove_reaction(emoji=VOTE_REACT.get("time"), member=msg.author)
-        await msg.add_reaction(emoji=VOTE_REACT.get("half_time"))
+        await msg.add_reaction(VOTE_REACT.get("half_time"))
         await asyncio.sleep(time / 2)
         await msg.remove_reaction(emoji=VOTE_REACT.get("half_time"), member=msg.author)
         await msg.add_reaction(VOTE_REACT.get("stop"))
         msg = await ctx.channel.fetch_message(msg.id)
-        reactors = await msg.reactions[0].users().flatten()
-        reactors = list(filter(lambda x: not x.bot, reactors))
-        all_members = list(map(lambda x: x.name, reactors))
-
-        players, spectators = get_random_spectators_and_players(all_members)
+        reactors = [user.name async for user in msg.reactions[0].users() if not user.bot]
+        players, spectators = get_random_spectators_and_players(reactors)
 
         # make short names
         players = list(map(lambda x: f"{x[:10]}..." if len(x) >= 13 else x, players))
@@ -220,5 +204,5 @@ class QcCommands(commands.Cog):
             await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
 
 
-def setup(bot):
-    bot.add_cog(QcCommands(bot))
+async def setup(bot):
+    await bot.add_cog(QcCommands(bot))

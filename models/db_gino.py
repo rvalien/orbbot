@@ -7,8 +7,7 @@ db = Gino()
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer(), primary_key=True)
-    discord_id = db.Column(db.Integer())
+    discord_id = db.Column(db.Integer(),  primary_key=True)
     user_name = db.Column(db.Unicode())
     birth_date = db.Column(db.Date())
 

@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+    orbbot:
+      image: orbbot/docker:0.1
+      build:
+        context: .
+        dockerfile: Dockerfile
+      restart: always
+
+      env_file:
+        - .env
+      volumes:
+#        - ./static_volume:/home/staticfiles
+#        - ./media_volume:/home/media
+#        - ./logs:/home/logs
+        - .:/home/app
+
+      command: [ "python", "bot.py"]
+
+    redis-master:
+      container_name: redis-master
+      image: 'redis:latest'
+      command: redis-server
+      environment:
+        - REDIS_REPLICATION_MODE=master
+        - REDIS_PASSWORD=my_master_password
+
+
+    redis-replica:
+      container_name: redis-replica
+      image: 'redis:latest'
+      depends_on:
+        - redis-master
+      environment:
+        - REDIS_REPLICATION_MODE=slave
+        - REDIS_MASTER_HOST=redis-master
+        - REDIS_MASTER_PORT_NUMBER=6379
+        - REDIS_MASTER_PASSWORD=my_master_password
+        - REDIS_PASSWORD=my_replica_password
+
+    postgres:
+        container_name: db
+        image: postgres:latest
+        restart: always
+        environment:
+            POSTGRES_DB: orbb_db
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+        volumes:
+            - .db_data:/var/lib/postgresql/data
+
+volumes:
+    postgres:

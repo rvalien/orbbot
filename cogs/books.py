@@ -34,14 +34,14 @@ class BookClub(commands.Cog):
                 else:
                     await ctx.reply("deadline: can't bee less that now", mention_author=False)
             else:
-                await asyncio.sleep(0.3)
+                await asyncio.sleep(0.1)
                 query = "select deadline from book_club_deadline"
                 value = await self.bot.pg_con.fetchval(query)
                 await ctx.reply(f'deadline {value if value else "is not set"}\n', mention_author=False)
         await ctx.message.delete(delay=delay)
 
-    @commands.command(aliases=["order"])
-    async def voice(self, ctx, *args):
+    @commands.command()
+    async def order(self, ctx):
         voice_channel = None
         try:
             voice_channel = ctx.message.author.voice.channel
@@ -50,8 +50,8 @@ class BookClub(commands.Cog):
 
         if voice_channel:
             all_members = get_members_voice(ctx)
-            random.shuffle(all_members)
             if all_members:
+                random.shuffle(all_members)
                 await ctx.send(f'\n**order**: {", ".join(all_members)}\n', delete_after=delay)
             else:
                 await ctx.send(f"\nIs there anyone alive in {voice_channel}?\n", delete_after=delay)

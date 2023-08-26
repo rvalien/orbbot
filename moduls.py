@@ -5,7 +5,6 @@ import requests
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-
 logger = logging.getLogger(__name__)
 
 HEROES = [
@@ -76,52 +75,13 @@ def random_map():
 
 def get_members_voice(context):
     if context.message.author.voice:
-        voice_channel = context.message.author.voice.channel
-        all_members = voice_channel.members
-        if not all_members:
-            return None
-        else:
-            no_bots = list(filter(lambda x: not x.bot, all_members))
-            list_of_names = list(map(lambda x: x.name, no_bots))
-            return list_of_names
-    else:
-        return None
-
-
-def text_formatter(team: list) -> str:
-    """
-    Transform list of lists into text
-    from:
-    [['player1', 'Sorlag'], ['player2', 'Nyx'], ['player3', 'Anarki'], ['player4', 'Ranger']]
-    to:
-    player1 — Sorlag
-    player2 — Nyx
-    player3 — Anarki
-    player4 — Ranger
-
-    :param team: list
-    :return: str
-    """
-    text = ""
-    for i in team:
-        text += " - ".join(i)
-        text += "\n"
-    return text
+        all_members = context.message.author.voice.channel.members
+        if all_members:
+            return [user.name for user in all_members if not user.bot]
 
 
 def get_random_spectators_and_players(all_players: list, separator: int = 8) -> tuple:
-    """
-    Simple function, that randomize list of players
-    split list into players and spectators
-    players list less or equal 8 and divisible by two
-    :param all_players: list
-    :separator int split
-    :return: tuple with 2 lists.
-    """
-
     random.shuffle(all_players)
-    logger.info("input:", len(all_players))
-
     players = all_players[:separator]
     spectators = all_players[separator:]
     return players, spectators

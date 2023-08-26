@@ -37,7 +37,6 @@ class QcCommands(commands.Cog):
         😸 Show quake profile link `$profile some_name`, or it will use your discord nickname.
         """
         p = member if member else ctx.author.nick
-        await ctx.send(f"https://quake-stats.bethesda.net/profile/{p}", delete_after=delay)
         await ctx.send(f"https://dev.quake-champions.com/profile/{p}", delete_after=delay)
         await ctx.message.delete(delay=delay)
 
@@ -54,8 +53,8 @@ class QcCommands(commands.Cog):
         await ctx.send(f"{icon}\n{text}", delete_after=delay)
         await ctx.message.delete(delay=delay)
 
-    @commands.command(aliases=["teams"])
-    async def voice_game(self, ctx, *, players=None):
+    @commands.command()
+    async def teams(self, ctx, *, players=None):
         """
         Shuffles members into 2 teams and spectators. See more with `$help team`
         2 types of use:
@@ -170,7 +169,7 @@ class QcCommands(commands.Cog):
         async with ctx.typing():
             await asyncio.sleep(0.5)
         msg = await ctx.channel.send(
-            f'Who wanna play **PIZDEC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
+            f'Who wanna play **PZDC**? Add you reaction bellow ⬇️ ({VOTE_REACT.get("time")} seconds to vote)',
             delete_after=delay,
         )
         for emoji in [VOTE_REACT.get("yes"), VOTE_REACT.get("no"), VOTE_REACT.get("time")]:
@@ -185,23 +184,26 @@ class QcCommands(commands.Cog):
         msg = await ctx.channel.fetch_message(msg.id)
         reactors = [user.name async for user in msg.reactions[0].users() if not user.bot]
         players, spectators = get_random_spectators_and_players(reactors)
-
-        # make short names
-        players = list(map(lambda x: f"{x[:10]}..." if len(x) >= 13 else x, players))
-        random.shuffle(players)
-        separator = int(len(players) / 2)
-        team1 = list(players[:separator])
-        team2 = list(players[separator:])
-        emojis = list(map(lambda x: x.get("patch"), HEROES))
-        random.shuffle(emojis)
-        generate_team_image(emojis[:separator], team1)
-        await ctx.send("team 1", file=discord.File("team.png"), delete_after=delay)
-        random.shuffle(emojis)
-        generate_team_image(emojis[: len(team2)], team2)
-        await ctx.send("team 2", file=discord.File("team.png"), delete_after=delay)
-
-        if spectators:
-            await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
+        if len(players) > 1:
+            # make short names
+            players = [f"{name[:10]}..." if len(name) >= 13 else name for name in players]
+            print(players)
+            random.shuffle(players)
+            separator = int(len(players) / 2)
+            print(players)
+            team1 = list(players[:separator])
+            team2 = list(players[separator:])
+            emojis = [hero.get("patch") for hero in HEROES]
+            random.shuffle(emojis)
+            generate_team_image(emojis[:separator], team1)
+            await ctx.send("team **PZ**", file=discord.File("team.png"), delete_after=delay)
+            random.shuffle(emojis)
+            generate_team_image(emojis[: len(team2)], team2)
+            await ctx.send("team **DC**", file=discord.File("team.png"), delete_after=delay)
+            if spectators:
+                await ctx.send(f"\nIt's ☕ time for {', '.join(spectators)}", delete_after=delay)
+        else:
+            await ctx.send("not enough player", delete_after=delay)
 
 
 async def setup(bot):

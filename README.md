@@ -16,16 +16,14 @@ lil bot for lil discord [QC](https://quake.bethesda.net/en) channel
 Orbb can help:  
 `map`      🗺️ Choose random map.
 `profile` Show quake profile link `profile some_name`  
-`pzdc`     Random character and team shuffle.
 ![](./vote_exmpl.png)
 `spec`    Bot send vote message with question like: `Who want to play now?` If player, that set positive reaction, more
 than 8, bot choose random spectators.  
-`voice`    Shuffle members of voice channel to 2 teams and spectators.  
+`teams`    Shuffle members of voice channel to 2 teams and spectators.  
 `vote`     Shuffle members who set positive reaction to 2 teams and spectators.  
 `role`     Show your roles & link to message where you can add/remove roles.  
 `bday`     Show happy birthday users.
 `pzdc`     OMG mode! Random team and character. Prepare to suffer.  
-`ping`     Used to check if the bot alive.  
 `help`     Shows this message and more info for commands.  
 `poll`     Simple poll with only 2 reactions (👍, 👎).  
 `roll`     🎲 roll dice and set result as reaction on your command. Return number from 1 to 6.  
@@ -33,7 +31,7 @@ than 8, bot choose random spectators.
 You don't need to input items again if they steal same, just type `random` without arguments.
 `deadline` Show deadline date for book club. To set the date use `!deadline YYYY-MM-DD`  
 ![](./deadline.PNG)  
-`slot`     Roll the slot machine
+`order`    Shuffle members of voice channel
 
 
 

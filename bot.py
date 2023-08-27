@@ -20,11 +20,8 @@ from tasks.tasks import bdays_check, deadline_check
 
 INITIAL_EXTENSIONS = [
     "cogs.qc",
-    # "cogs.listeners",
     "cogs.commands",
     "cogs.books",
-    # "cogs.games",
-    # "cogs.roles",
 ]
 token = os.environ["TOKEN"]
 # token = os.environ["TEST_TOKEN"]

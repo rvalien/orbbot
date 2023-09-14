@@ -1,7 +1,7 @@
 import json
 import logging
 import random
-import requests
+import httpx
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
@@ -45,14 +45,14 @@ def generate_team_image(list_im: list, names: list) -> None:
 
 
 def random_gif(apikey, search_term, lmt=8):
-    r = requests.get(f"https://api.tenor.com/v1/random?q={search_term}&key={apikey}&limit={lmt}")
+    r = httpx.get(f"https://api.tenor.com/v1/random?q={search_term}&key={apikey}&limit={lmt}")
     if r.status_code == 200:
         top_8gifs = json.loads(r.content)
     else:
         top_8gifs = None
     gif_id = top_8gifs["results"][0]["id"]
     gif_url = top_8gifs["results"][0]["media"][0]["gif"]["url"]
-    r = requests.get(f"https://api.tenor.com/v1/registershare?id={gif_id}&key={apikey}&q={search_term}")
+    r = httpx.get(f"https://api.tenor.com/v1/registershare?id={gif_id}&key={apikey}&q={search_term}")
     if r.status_code in (200, 202):
         return gif_url
     else:

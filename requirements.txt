@@ -1,8 +1,8 @@
-requests
-discord.py
-asyncpg
-invoke
-redis
-Pillow
-numpy
-gino
+requests>=2.31.0
+discord.py>=2.3.2
+asyncpg>=0.28.0
+invoke>=2.2.0
+redis>=5.0.0
+Pillow>=10.0.0
+numpy>=1.25.2
+gino>=1.0.1

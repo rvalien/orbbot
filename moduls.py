@@ -82,6 +82,8 @@ def get_members_voice(context):
 
 def get_random_spectators_and_players(all_players: list, separator: int = 8) -> tuple:
     random.shuffle(all_players)
+    if len(all_players) < separator:
+        separator = (len(all_players[:5]) // 2) * 2
     players = all_players[:separator]
     spectators = all_players[separator:]
     return players, spectators
